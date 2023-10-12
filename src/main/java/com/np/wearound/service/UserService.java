@@ -2,6 +2,7 @@ package com.np.wearound.service;
 
 import java.nio.CharBuffer;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,7 +57,7 @@ public class UserService {
 		System.out.println("firstName : " + userDTO.getPhone());
 		System.out.println("lastName : " + userDTO.getName());
 		System.out.println("password : " + userDTO.getPassword());
-		System.out.println("token: " + userDTO.getToken());
+//		System.out.println("token: " + userDTO.getToken());
 		
 		Optional<User> optionalUser = userRepository.findByEmail(userDTO.getEmail());
 		
@@ -69,7 +70,7 @@ public class UserService {
 		user.setEmail(userDTO.getEmail());
 		user.setPhone(userDTO.getPhone());
 		user.setName(userDTO.getName());
-		user.setToken(userDTO.getToken());
+//		user.setToken(userDTO.getToken());
 		
 		//passwordEncoder를 사용하여 암호를 일반텍스로 저장한다.
 		user.setPassword(passwordEncoder.encode(CharBuffer.wrap(userDTO.getPassword())));
@@ -79,5 +80,4 @@ public class UserService {
 		return saveUser;
 		
 	}
-
 }
