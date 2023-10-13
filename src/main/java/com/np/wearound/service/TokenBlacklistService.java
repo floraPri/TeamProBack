@@ -15,14 +15,17 @@ public class TokenBlacklistService {
     }
 
     public void blacklistToken(String token) {
+    	System.out.println("TokenBlacklistService - blacklistToken");
         redisTemplate.opsForSet().add(BLACKLIST_KEY, token);
     }
 
     public boolean isTokenBlacklisted(String token) {
+    	System.out.println("TokenBlacklistService - isTokenBlacklisted");
         return redisTemplate.opsForSet().isMember(BLACKLIST_KEY, token);
     }
 
     public Set<String> getBlacklistedTokens() {
+    	System.out.println("TokenBlacklistService - getBlacklistedTokens");
         return redisTemplate.opsForSet().members(BLACKLIST_KEY);
     }
 }
