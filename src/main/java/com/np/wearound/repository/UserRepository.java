@@ -9,7 +9,6 @@ import com.np.wearound.entities.User;
 
 public interface UserRepository extends JpaRepository<User,String>{
 	
-//	Optional<User> findByLogin(String login);
 	Optional<User> findByEmail(String email);
 
 }

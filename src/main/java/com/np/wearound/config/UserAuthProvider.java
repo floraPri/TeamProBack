@@ -64,7 +64,7 @@ public class UserAuthProvider {
 		
 		//JWT를 확인하기 위해 먼저 디코딩한다. 유효기간을 초과하면 예외가 발생한다.
 		DecodedJWT decoded = verifier.verify(token);	
-		
+		System.out.println("decoded.getIssuer() : " + decoded.getIssuer());
 		System.out.println("<<<UserAuthProvider - validateToken 2>>>");
 		UserDTO user = userService.findById(decoded.getIssuer());
 		//UserDTO user = null;

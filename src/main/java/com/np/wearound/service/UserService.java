@@ -23,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 	
 	private final UserRepository userRepository;
-	private final UserMapper userMapper;
 	private final PasswordEncoder passwordEncoder;
 	
 	public UserDTO findById(String email) {
@@ -33,7 +32,11 @@ public class UserService {
 		User user = userRepository.findByEmail(email)
 			.orElseThrow(() -> new AppException("UnKnown user", HttpStatus.NOT_FOUND));
 		
-		return userMapper.toUserDTO(user);
+	    UserDTO userDTO = new UserDTO();
+	    userDTO.setEmail(user.getEmail());
+	    userDTO.setPassword(user.getPassword());
+	    
+	    return userDTO;
 		
 	}
 	
