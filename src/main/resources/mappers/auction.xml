@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.np.wearound.auctionDao.AuctionDao">
+	<insert id="AuctionAdd" parameterType="com.np.wearound.auctionEntity.AuctionEntity">
+		INSERT INTO Auction(auctionno, userno, auctiontitle, image, auctioncontent, buynow, startprice, lastprice, minbid) 
+		VALUES(auctionno_seq.NEXTVAL, 
+		       (SELECT userno FROM user_tbl WHERE userno = #{userno}), 
+		       #{auctiontitle}, 
+		       #{image}, 
+		       #{auctioncontent}, 
+		       #{buynow}, 
+		       #{startprice}, 
+		       #{lastprice}, 
+		       #{minbid}
+		)
+	</insert>
+</mapper>
