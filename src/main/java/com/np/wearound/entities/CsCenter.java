@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 )
 @Entity	//누락주의
 @DynamicInsert
-@Table(name="csCenter")
+@Table(name="cscenter")
 @Builder
 @Data
 public class CsCenter {

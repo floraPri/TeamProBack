@@ -32,13 +32,14 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public List<CsCenter> csListAll() {
 		System.out.println("AdminServiceImpl - csListAll");
-		
+		System.out.println(csDao.findAll());
 		return csDao.findAll();
 	}
 
 	// cs 추가
 	@Override
 	public void csAdd(CsCenter dto) {
+		System.out.println(dto);
 		csDao.save(dto);
 	}
 
