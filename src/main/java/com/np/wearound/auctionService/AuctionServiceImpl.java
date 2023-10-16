@@ -1,6 +1,7 @@
 package com.np.wearound.auctionService;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.np.wearound.auctionDao.AuctionDao;
+import com.np.wearound.auctionDao.AuctionRepository;
 import com.np.wearound.auctionDto.AuctionAddDTO;
 import com.np.wearound.auctionEntity.AuctionEntity;
 import com.np.wearound.controller.LoginController;
@@ -21,6 +23,9 @@ public class AuctionServiceImpl implements AuctionService {
 	
 	@Autowired
 	private AuctionDao dao;
+	
+	@Autowired
+	private AuctionRepository Repo;
 	
 	@Override
 	public void AuctionAdd(AuctionAddDTO dto) 
@@ -38,6 +43,11 @@ public class AuctionServiceImpl implements AuctionService {
 	    ent.setMinbid(dto.getMinBid());
 		
 	    dao.AuctionAdd(ent);
+	}
+	
+	public List<AuctionEntity> AuctionList() 
+			throws ServletException, IOException {
+		return Repo.findAll();
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.np.wearound.auctionController;
 
+import java.util.List;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.np.wearound.auctionDto.AuctionAddDTO;
+import com.np.wearound.auctionEntity.AuctionEntity;
 import com.np.wearound.auctionService.AuctionService;
 import com.np.wearound.controller.LoginController;
 
@@ -35,9 +38,14 @@ public class AuctionController {
 	@Autowired
 	private AuctionService service;
 	
-	private final String uploadDirectory = "C:\\Users\\FloraPrincess\\Desktop\\DeV\\TeamProImage";
+	// 집
+	//private final String uploadDirectory = "C:\\Users\\FloraPrincess\\Desktop\\DeV\\TeamProImage";
 	
-	@PostMapping(value="/auctionAdd", consumes = "multipart/form-data")
+	// 학원
+	private final String uploadDirectory = "C:\\Users\\ICT02-14\\Desktop\\Dev\\TeamProImage";
+	
+	// 경매 추가
+	@PostMapping(value="/auctionAdd", consumes="multipart/form-data")
 	public String auctionAdd(
 		    @RequestParam("auctiontitle") String auctiontitle, 
 		    @RequestParam("auctioncontent") String auctioncontent,
@@ -76,6 +84,14 @@ public class AuctionController {
 		logger.info(">>> Controller AuctionAdd End! <<<");
 		
 		return "auctionAdd";
+	}
+	
+	@GetMapping(value="/auction")
+	public List<AuctionEntity> auctionList() 
+			throws ServletException, IOException {
+		
+		List<AuctionEntity> list = service.AuctionList();
+		return list;
 	}
 	
 }
