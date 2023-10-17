@@ -67,6 +67,7 @@ public class UserAuthProvider {
 		System.out.println("decoded.getIssuer() : " + decoded.getIssuer());
 		System.out.println("<<<UserAuthProvider - validateToken 2>>>");
 		UserDTO user = userService.findById(decoded.getIssuer());
+		System.out.println("user : " + user);
 		//UserDTO user = null;
 		//사용자가 내 데이터베이스에 존재하는지 확인
 		return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
