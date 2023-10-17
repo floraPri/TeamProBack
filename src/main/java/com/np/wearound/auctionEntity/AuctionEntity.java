@@ -1,6 +1,7 @@
 package com.np.wearound.auctionEntity;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,13 +38,15 @@ public class AuctionEntity {
     private int lastprice;
     private int minbid;
     private Date austarttime;
-    private Date lasttime;
+    private Timestamp lasttime;
     private int cham;
+    private String address;
+    private String name;
     
     public AuctionEntity() {}
 
     public AuctionEntity(int auctionno, int userno, String auctiontitle, String image, String auctioncontent, int buynow,
-            int startprice, int lastprice, int minbid, Date austarttime, Date lasttime, int cham) {
+            int startprice, int lastprice, int minbid, Date austarttime, Timestamp lasttime, int cham, String address, String name) {
         super();
         this.auctionno = auctionno;
         this.userno = userno;
@@ -57,5 +60,7 @@ public class AuctionEntity {
         this.austarttime = austarttime;
         this.lasttime = lasttime;
         this.cham = cham;
+        this.address = address;
+        this.name = name;
     }
 }

@@ -1,25 +1,34 @@
 package com.np.wearound.auctionDto;
 
 import java.sql.Timestamp;
- 
-public class AuctionListDTO {
+
+public class AuctionBidingDTO {
+    private int auctionbidderno;
     private int auctionno;
+    private String name;
     private String auctiontitle;
     private String image;
-    private int startprice;
+    private int lastprice;
     private Timestamp lasttime;
-    private int cham;
 
-    public AuctionListDTO() {
-    }
+    public AuctionBidingDTO() {}
 
-    public AuctionListDTO(int auctionno, String auctiontitle, String image, int startprice, Timestamp lasttime, int cham) {
+    public AuctionBidingDTO(int auctionbidderno, int auctionno, String name, String auctiontitle, String image, int lastprice, Timestamp lasttime) {
+        this.auctionbidderno = auctionbidderno;
         this.auctionno = auctionno;
+        this.name = name;
         this.auctiontitle = auctiontitle;
         this.image = image;
-        this.startprice = startprice;
+        this.lastprice = lastprice;
         this.lasttime = lasttime;
-        this.cham = cham;
+    }
+
+    public int getAuctionbidderno() {
+        return auctionbidderno;
+    }
+
+    public void setAuctionbidderno(int auctionbidderno) {
+        this.auctionbidderno = auctionbidderno;
     }
 
     public int getAuctionno() {
@@ -28,6 +37,14 @@ public class AuctionListDTO {
 
     public void setAuctionno(int auctionno) {
         this.auctionno = auctionno;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAuctiontitle() {
@@ -46,12 +63,12 @@ public class AuctionListDTO {
         this.image = image;
     }
 
-    public int getStartprice() {
-        return startprice;
+    public int getLastprice() {
+        return lastprice;
     }
 
-    public void setStartprice(int startprice) {
-        this.startprice = startprice;
+    public void setLastprice(int lastprice) {
+        this.lastprice = lastprice;
     }
 
     public Timestamp getLasttime() {
@@ -60,13 +77,5 @@ public class AuctionListDTO {
 
     public void setLasttime(Timestamp lasttime) {
         this.lasttime = lasttime;
-    }
-
-    public int getCham() {
-        return cham;
-    }
-
-    public void setCham(int cham) {
-        this.cham = cham;
     }
 }

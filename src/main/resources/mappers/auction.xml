@@ -17,4 +17,40 @@
 		       #{minbid}
 		)
 	</insert>
+	
+	<update id="AuctionEdit" parameterType="com.np.wearound.auctionEntity.AuctionEntity">
+	
+	</update>
+	
+	<select id="AuctionHost" parameterType="int" resultType="com.np.wearound.auctionDto.AuctionHostDTO">
+		SELECT auctionno
+			, userno
+			, auctiontitle
+			, image
+			, lastprice
+			, lasttime
+			, name
+		 FROM Auction
+		 WHERE userno = #{userno}
+	</select>
+	
+	<select id="AuctionBiding" parameterType="String" resultType="com.np.wearound.auctionDto.AuctionBidingDTO">
+		SELECT AuctionBiding.auctionbidderno
+			 , AuctionBiding.auctionno
+			 , AuctionBiding.name
+			 , Auction.auctiontitle
+			 , Auction.image
+			 , Auction.lastprice
+			 , Auction.lasttime
+		  FROM AuctionBiding
+		  JOIN Auction ON AuctionBiding.auctionno = Auction.auctionno
+		 WHERE AuctionBiding.name = #{name}	
+	</select>
+	
+	<select id="AuctionBider" parameterType="int" resultType="com.np.wearound.auctionDto.AuctionBiderDTO">
+		SELECT * 
+		  FROM AuctionBidder 
+		 WHERE auctionno = #{userno}
+	</select>
+	
 </mapper>
