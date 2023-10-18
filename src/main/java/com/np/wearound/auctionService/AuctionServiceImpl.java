@@ -3,6 +3,7 @@ package com.np.wearound.auctionService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 
@@ -16,6 +17,7 @@ import com.np.wearound.auctionDao.AuctionRepository;
 import com.np.wearound.auctionDto.AuctionAddDTO;
 import com.np.wearound.auctionDto.AuctionBiderDTO;
 import com.np.wearound.auctionDto.AuctionBidingDTO;
+import com.np.wearound.auctionDto.AuctionDTO;
 import com.np.wearound.auctionDto.AuctionHostDTO;
 import com.np.wearound.auctionDto.AuctionListDTO;
 import com.np.wearound.auctionEntity.AuctionEntity;
@@ -51,6 +53,28 @@ public class AuctionServiceImpl implements AuctionService {
 	    dao.AuctionAdd(ent);
 	}
 	
+	// 수정 위한 상세페이지
+	@Override
+	public AuctionDTO AuctionDetail(int auctionno)
+			throws ServletException, IOException {
+		logger.info("<<< Serivce AuctionEdit Start! >>>");
+		
+		AuctionDTO dto = new AuctionDTO(); 
+		Optional<AuctionEntity> entOp = Repo.findById(auctionno);
+		AuctionEntity ent = entOp.get();
+		
+		dto.setAuctionno(ent.getAuctionno());
+		dto.setUserno(ent.getUserno());
+		dto.setAuctiontitle(ent.getAuctiontitle());
+		dto.setImage(ent.getAuctioncontent());
+		dto.setAuctioncontent(ent.getAuctioncontent());
+		dto.setBuynow(ent.getBuynow());
+		dto.setStartprice(ent.getStartprice());
+		dto.setMinbid(ent.getMinbid());
+		
+		return dto;
+	}
+	
 	// 경매 수정
 	@Override
 	public void AuctionEdit(AuctionAddDTO dto) 
@@ -59,15 +83,17 @@ public class AuctionServiceImpl implements AuctionService {
 		
 		AuctionEntity ent = new AuctionEntity();
 	
-	    ent.setUserno(dto.getUserno());
+	    String test = dto.getAuctiontitle();
 	    ent.setAuctiontitle(dto.getAuctiontitle());
 	    ent.setImage(dto.getImage());
 	    ent.setAuctioncontent(dto.getAuctioncontent());
 	    ent.setBuynow(dto.getBuynow());
 	    ent.setStartprice(dto.getStartprice());
 	    ent.setMinbid(dto.getMinBid());
+	    ent.setAuctionno(dto.getAuctionno());
 	    
-	    dao.AuctionEdit(ent);
+	    int updateCnet = dao.AuctionEdit(ent);
+	    System.out.println("업데이트 확인 "+updateCnet);
 	}
 	
 	@Override

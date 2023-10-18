@@ -3,6 +3,7 @@ package com.np.wearound.auctionDto;
 // 경매 추가 DTO
 public class AuctionAddDTO {
 
+	private int auctionno;
 	private int userno;
 	private String auctiontitle;
 	private String image;
@@ -13,9 +14,10 @@ public class AuctionAddDTO {
 	
 	public AuctionAddDTO() {}
 
-	public AuctionAddDTO(int userno, String auctiontitle, String image, String auctioncontent, int buynow,
+	public AuctionAddDTO(int auctionno, int userno, String auctiontitle, String image, String auctioncontent, int buynow,
 			int startprice, int minBid) {
 		super();
+		this.auctionno = auctionno;
 		this.userno = userno;
 		this.auctiontitle = auctiontitle;
 		this.image = image;
@@ -25,6 +27,14 @@ public class AuctionAddDTO {
 		this.minBid = minBid;
 	}
 
+	public int getAuctionno() {
+		return auctionno;
+	}
+	
+	public void setAuctionno(int auctionno) {
+		this.auctionno = auctionno;
+	}
+		
 	public int getUserno() {
 		return userno;
 	}

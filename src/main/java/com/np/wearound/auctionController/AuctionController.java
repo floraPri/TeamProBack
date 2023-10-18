@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.np.wearound.auctionDto.AuctionAddDTO;
 import com.np.wearound.auctionDto.AuctionBiderDTO;
 import com.np.wearound.auctionDto.AuctionBidingDTO;
+import com.np.wearound.auctionDto.AuctionDTO;
 import com.np.wearound.auctionDto.AuctionHostDTO;
 import com.np.wearound.auctionDto.AuctionListDTO;
 import com.np.wearound.auctionEntity.AuctionEntity;
@@ -90,6 +91,14 @@ public class AuctionController {
 		return "auctionAdd";
 	}
 	
+	// 수정 위한 상세페이지
+	@GetMapping(value="/auctionEdit")
+	public AuctionDTO auctionDetail(@RequestParam("auctionno")int auctionno)
+			throws ServletException, IOException {
+		logger.info(">>> Controller auctionDetail Start! <<<");
+		return service.AuctionDetail(auctionno);
+	}
+	
 	// 경매 수정
 	@PostMapping(value="/auctionEdit", consumes="multipart/form-data")
 	public String auctionEdit(
@@ -98,7 +107,8 @@ public class AuctionController {
 			@RequestParam("image") MultipartFile image,
 			@RequestParam("buynow") int buynow,
 			@RequestParam("startprice") int startprice,
-			@RequestParam("minbid") int minbid
+			@RequestParam("minbid") int minbid,
+			@RequestParam("auctionno") int auctionno
 //		    ,AuctionAddDTO dto <- 에러의 온상 기억해두자
 			)			
 		   throws ServletException, IOException {
@@ -118,7 +128,8 @@ public class AuctionController {
 			dto.setImage(fullPath);
 			}
 		
-		dto.setUserno(1); // 일단 하드 코딩
+		//dto.setUserno(1); // 일단 하드 코딩
+		dto.setAuctionno(auctionno);
 		dto.setAuctiontitle(auctiontitle);
 		dto.setAuctioncontent(auctioncontent);
 		dto.setBuynow(buynow);

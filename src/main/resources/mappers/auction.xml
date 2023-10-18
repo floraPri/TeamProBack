@@ -19,7 +19,14 @@
 	</insert>
 	
 	<update id="AuctionEdit" parameterType="com.np.wearound.auctionEntity.AuctionEntity">
-	
+		UPDATE Auction
+			SET
+			  auctiontitle = #{auctiontitle},
+			  auctioncontent = #{auctioncontent},
+			  buynow = #{buynow},
+			  startprice = #{startprice},
+			  minbid = #{minbid}
+			WHERE auctionno = #{auctionno}
 	</update>
 	
 	<select id="AuctionHost" parameterType="int" resultType="com.np.wearound.auctionDto.AuctionHostDTO">
