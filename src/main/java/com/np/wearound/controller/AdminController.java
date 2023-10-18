@@ -1,6 +1,8 @@
 package com.np.wearound.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.np.wearound.config.UserAuthProvider;
 import com.np.wearound.entities.CsCenter;
+import com.np.wearound.entities.JoinCount;
+import com.np.wearound.entities.LoginCount;
 import com.np.wearound.entities.User;
 import com.np.wearound.service.AdminServiceImpl;
 import com.np.wearound.service.TokenBlacklistService;
@@ -36,16 +41,23 @@ public class AdminController {
 	private AdminServiceImpl service;
 	
 	// 어드민 메인
-	@GetMapping("/adminHome")
-	public String adminHome(Model model) {
-		logger.info("<<< AdminController - adminHome >>>");
+	@GetMapping("/joinChart")
+	public List<JoinCount> joinChart() {
+		logger.info("<<< AdminController - joinChart >>>");
 		
-		// 차트 넣어야함
-		return "adminHome";
+		return service.joinCountList();
+	}
+	
+	// 어드민 메인
+	@GetMapping("/loginChart")
+	public List<LoginCount> loginChart() {
+		logger.info("<<< AdminController - loginChart >>>");
+		
+		return service.loginCountList();
 	}
 	
 	// 검색하기
-	@GetMapping("/adminSearchUser")
+	@GetMapping("/{userno}")
 	public ResponseEntity<User> userSearchAction(@RequestParam int userno) {
 		logger.info("<<< AdminController - userSearchAction >>>");
 		
@@ -57,9 +69,33 @@ public class AdminController {
 	    }
 	}
 	
+	// 유저 밴
+	@ PutMapping("/userBan")
+	public String userBan(@RequestBody Map<String, String> map) {
+		logger.info("<<< AdminController - userBan >>>");
+		int userno = Integer.parseInt(map.get("userno"));
+	    String enabled = map.get("enabled");
+		System.out.println(userno);
+		System.out.println(enabled);
+		service.userBan(userno, enabled);
+		return null;
+	}
+	
+	// 유저 릴리즈
+	@ PutMapping("/userRelease")
+	public String userRelease(@RequestBody Map<String, String> map) {
+		logger.info("<<< AdminController - userRelease >>>");
+		int userno = Integer.parseInt(map.get("userno"));
+	    String enabled = map.get("enabled");
+		System.out.println(userno);
+		System.out.println(enabled);
+		service.userBan(userno, enabled);
+		return null;
+	}
+	
 	// 질문등록 페이지
 	@GetMapping("/addCs")
-	public List<CsCenter> csCenterForm(Model model) {
+	public List<CsCenter> csCenterForm() {
 		logger.info("<<< AdminController - csCenterForm >>>");
 		System.out.println("컨트롤러:" + service.csListAll());
 		return service.csListAll();
