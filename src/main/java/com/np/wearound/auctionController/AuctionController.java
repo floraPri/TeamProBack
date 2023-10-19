@@ -153,6 +153,10 @@ public class AuctionController {
 		return list;
 	}
 	
+//	// 경매 비활성
+//	@GetMapping(value ="enable")
+//	public 
+	
 	// 경매 호스트
 	@GetMapping(value="/auctionHost")
 	public List<AuctionHostDTO> auctionHost(@RequestParam("userno")int userno)
@@ -169,8 +173,7 @@ public class AuctionController {
 			throws ServletException, IOException {
 		logger.info("<<< Controller auctionBiding Start! >>>");
 		
-		List<AuctionBidingDTO> list = service.AuctionBiding(name);
-		return list;
+		return service.AuctionBiding(name);
 	}
 	
 	// 경매 게스트 - 낙찰자

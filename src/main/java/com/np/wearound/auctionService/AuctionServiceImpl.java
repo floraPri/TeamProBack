@@ -96,11 +96,12 @@ public class AuctionServiceImpl implements AuctionService {
 	    System.out.println("업데이트 확인 "+updateCnet);
 	}
 	
+	// 경매 리스트
 	@Override
 	public List<AuctionListDTO> AuctionList() 
 			throws ServletException, IOException {
 		logger.info("<<< Serivce AuctionList Start! >>>");
-        List<AuctionEntity> listEnt = Repo.findAll();
+        List<AuctionEntity> listEnt = Repo.findByStatus(1);
         List<AuctionListDTO> list = new ArrayList<>();
 
 		for (AuctionEntity entity : listEnt) {
@@ -117,8 +118,10 @@ public class AuctionServiceImpl implements AuctionService {
 		return list;
 	}
 	
+	// 경매 비활성
+	
+	
 	// 경매 수정
-
 	@Override
 	public List<AuctionHostDTO> AuctionHost(int userno) 
 			throws ServletException, IOException {
@@ -127,6 +130,7 @@ public class AuctionServiceImpl implements AuctionService {
 		return dao.AuctionHost(userno);
 	}
 
+	// 입찰중
 	@Override
 	public List<AuctionBidingDTO> AuctionBiding(String name) 
 			throws ServletException, IOException {
@@ -135,6 +139,7 @@ public class AuctionServiceImpl implements AuctionService {
 		return dao.AuctionBiding(name);
 	}
 
+	// 낙찰완료
 	@Override
 	public List<AuctionBiderDTO> AuctionBider(int userno) 
 			throws ServletException, IOException {

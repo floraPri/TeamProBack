@@ -55,9 +55,16 @@
 	</select>
 	
 	<select id="AuctionBider" parameterType="int" resultType="com.np.wearound.auctionDto.AuctionBiderDTO">
-		SELECT * 
-		  FROM AuctionBidder 
-		 WHERE auctionno = #{userno}
+		SELECT AuctionBidder.auctionbidderno
+		     , AuctionBidder.auctionno
+		     , AuctionBidder.userno
+		     , AuctionBidder.bidprice
+		     , AuctionBidder.auEndTime
+			 , Auction.auctiontitle
+			 , Auction.image
+		FROM AuctionBidder
+		JOIN Auction ON AuctionBidder.auctionno = Auction.auctionno
+		WHERE AuctionBidder.userno =  #{userno}
 	</select>
 	
 </mapper>
