@@ -1,12 +1,14 @@
 package com.np.wearound.entities;
 
 import java.sql.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -43,6 +45,6 @@ public class User {
     private String key;//회원가입시 이메일 key 추가
     private String authority;//권한 : ROLE_USER:customer, ROLE_ADMIN:관리자
     private String enabled;//계정사용 가능여부(1:사용가능, 0:사용불가) : 이메일인증시 1로 update
-    private String token;  
+    private String token;
 
 }
