@@ -71,26 +71,24 @@ public class AdminController {
 	
 	// 유저 밴
 	@ PutMapping("/userBan")
-	public String userBan(@RequestBody Map<String, String> map) {
+	public void userBan(@RequestBody Map<String, String> map) {
 		logger.info("<<< AdminController - userBan >>>");
 		int userno = Integer.parseInt(map.get("userno"));
 	    String enabled = map.get("enabled");
 		System.out.println(userno);
 		System.out.println(enabled);
 		service.userBan(userno, enabled);
-		return null;
 	}
 	
 	// 유저 릴리즈
 	@ PutMapping("/userRelease")
-	public String userRelease(@RequestBody Map<String, String> map) {
+	public void userRelease(@RequestBody Map<String, String> map) {
 		logger.info("<<< AdminController - userRelease >>>");
 		int userno = Integer.parseInt(map.get("userno"));
 	    String enabled = map.get("enabled");
 		System.out.println(userno);
 		System.out.println(enabled);
 		service.userBan(userno, enabled);
-		return null;
 	}
 	
 	// 질문등록 페이지
@@ -102,13 +100,24 @@ public class AdminController {
 
 	}
 	
-	// 질문등록
-	@PostMapping("/add")
+	// 질문등록, 수정
+	@PostMapping("/csAdd")
 	public String addCs(@RequestBody CsCenter dto) {
 		logger.info("<<< AdminController - addCs >>>");
 		
 		service.csAdd(dto);
 		return "redirect:/addCs";
+	}
+	
+	// 질문삭제
+	@PutMapping("/csDelete")
+	public void addCsDelete(@RequestBody Map<String, String> map) {
+		logger.info("<<< AdminController - addCsDelete >>>");
+		int questionnum = Integer.parseInt(map.get("questionnum"));
+	    String show = map.get("show");
+		System.out.println(questionnum);
+		System.out.println(show);
+		service.csDelete(questionnum, show);
 	}
 	
 }

@@ -101,10 +101,10 @@ public class AdminServiceImpl implements AdminService{
 	public List<CsCenter> csListAll() {
 		System.out.println("AdminServiceImpl - csListAll");
 		System.out.println(csDao.findAll());
-		return csDao.findAll();
+		return csDao.findAllByOrderByQuestionnum();
 	}
 
-	// cs 추가
+	// cs 추가, 수정
 	@Override
 	public void csAdd(CsCenter dto) {
 		System.out.println("AdminServiceImpl - csAdd");
@@ -112,4 +112,14 @@ public class AdminServiceImpl implements AdminService{
 		csDao.save(dto);
 	}
 
+	// cs 삭제
+	public void csDelete(int questionnum, String show) {
+		System.out.println("AdminServiceImpl - csAddDelete");
+		CsCenter cs = csDao.findByQuestionnum(questionnum);
+        if (cs != null) {
+        	cs.setShow(show);
+            csDao.save(cs);
+        }
+	}
+	
 }

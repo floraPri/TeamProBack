@@ -32,6 +32,8 @@ public interface AdminService {
 	
 	// cs 추가
 	public void csAdd(CsCenter dto);
+		
+	// cs 삭제
+	public void csDelete(int questionnum, String show);
 	
-
 }
