@@ -3,13 +3,14 @@ package com.np.wearound.service;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.np.wearound.dto.BuyDTO;
-import com.np.wearound.entities.Buy;
-import com.np.wearound.repository.OrderRepository;
+import com.np.wearound.repository.BuyRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,16 +19,23 @@ import lombok.RequiredArgsConstructor;
 public class MyPageServiceImpl implements MyPageService {
 
 	@Autowired
-	private OrderRepository dao;
+	private BuyRepository dao;
 	
+	@Autowired
+	private SqlSession sqlSession;
 	
 	//구매목록 List
 	@Override
-	public List<Buy> orderListAll() {
-		System.out.println(" MyPageServiceImpl - orderListAll");
-		System.out.println(dao.findAll());
+	public List<BuyDTO> orderListAll() {
+		System.out.println("MyPageServiceImpl - orderListAll()");
 		
-		return dao.findAll();
+		List<BuyDTO> buyList = sqlSession.selectList("com.np.wearound.mappers.BuyMapper.buyList");
+		
+		System.out.println(buyList);
+		
+		return buyList;
 	}
+	
 
+	
 }

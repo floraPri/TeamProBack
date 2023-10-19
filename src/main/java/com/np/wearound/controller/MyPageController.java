@@ -35,10 +35,10 @@ public class MyPageController {
 	
 	//구매목록 페이지
 	@GetMapping("/orderListPage")
-	public List<Buy> orderList(Model model) {
+	public List<BuyDTO> orderList(Model model) {
 		logger.info("<<< MyPageController -  orderList(구매목록페이지)>>>");
 		
-		List<Buy> order_list = service.orderListAll();
+		List<BuyDTO> order_list = service.orderListAll();
 		
 		return order_list;
 	}

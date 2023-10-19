@@ -14,6 +14,6 @@ import com.np.wearound.entities.Buy;
 public interface MyPageService {
 	
 	//회원 구매리스트
-	public List<Buy> orderListAll();
+	public List<BuyDTO> orderListAll();
 	
 }

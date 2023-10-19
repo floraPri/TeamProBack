@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class BuyDTO {
-	private int product_buycode;      	//NUMBER(10) PRIMARY KEY,
+	private int buycode;      	//NUMBER(10) PRIMARY KEY,
     private int product_code;         	//NUMBER(10),
     private int buyer;                  //NUMBER(10),  -- 구매자 userno 
 	private int amount;			        //NUMBER(10),	-- 구매수량	
@@ -26,8 +26,6 @@ public class BuyDTO {
 	private String product_brand;		// 상품 브랜드명
 	private String product_img;			// 상품 이미지
 	private String product_buyer_id;    ///구매자 id
-	
-	
-	
+
 	
 }
