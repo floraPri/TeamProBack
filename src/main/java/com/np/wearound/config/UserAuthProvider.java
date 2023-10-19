@@ -1,19 +1,25 @@
 package com.np.wearound.config;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Value;	//경로주의(롬복 아님)
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.np.wearound.dto.UserDTO;
 import com.np.wearound.service.UserService;
@@ -49,6 +55,7 @@ public class UserAuthProvider {
 				.withIssuer(id)
 				.withIssuedAt(now)
 				.withExpiresAt(validity)
+				.withClaim("roles", "ROLE_USER")
 				.sign(Algorithm.HMAC256(secretKey));
 		
 	}
@@ -68,9 +75,12 @@ public class UserAuthProvider {
 		System.out.println("<<<UserAuthProvider - validateToken 2>>>");
 		UserDTO user = userService.findById(decoded.getIssuer());
 		System.out.println("user : " + user);
-		//UserDTO user = null;
+		String role = decoded.getClaim("roles").asString();
+		System.out.println("role : " + role);
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority(role));
+		System.out.println("authorities" + authorities);
 		//사용자가 내 데이터베이스에 존재하는지 확인
-		return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
-		
+		return new UsernamePasswordAuthenticationToken(user, null, authorities);
 	}
 }
