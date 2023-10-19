@@ -46,8 +46,9 @@ public class AuthController {
 	public ResponseEntity<User> login(@RequestBody CredentialsDTO credentialsDTO) {
 		System.out.println("<<< AuthController - login() >>>");
 		User user = userService.login(credentialsDTO);
-		System.out.println("token:" + userAuthProvider.createToken(user.getEmail()));
 		user.setToken(userAuthProvider.createToken(user.getEmail()));
+		System.out.println("token:" + user.getToken());
+		
 		
 		return ResponseEntity.ok(user);	//새로운 jwt를 반환
 	}
