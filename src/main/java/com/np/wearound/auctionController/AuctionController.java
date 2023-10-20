@@ -45,9 +45,9 @@ public class AuctionController {
 	//private final String uploadDirectory = "C:\\Users\\FloraPrincess\\Desktop\\DeV\\TeamProImage";
 	
 	// 학원
-	// private final String uploadDirectory = "C:\\Users\\ICT02-14\\Desktop\\Dev\\TeamProImage";
+//	 private final String uploadDirectory = "C:\\Users\\ICT02-14\\Desktop\\Dev\\TeamProImage";
 
-	private final String uploadDirectory = "C:\\Users\\ICT02-12\\Desktop";
+	private final String uploadDirectory = "\\TeamProImage";
 	
 	// 경매 추가
 	@PostMapping(value="/auctionAdd", consumes="multipart/form-data")

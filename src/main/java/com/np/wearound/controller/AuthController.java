@@ -88,7 +88,6 @@ public class AuthController {
 			System.out.println("token : "+authToken);
 		    // Extract and blacklist the token
 		    System.out.println("authToken : " + authToken);
-		    blacklistService.blacklistToken(authToken);
 		    System.out.println("블랙리스트 존재여부 : " + blacklistService.isTokenBlacklisted(authToken));
 		    System.out.println("모든 블랙리스트 토큰: " + blacklistService.getBlacklistedTokens());
 		    return userService.findById(decoded.getIssuer());
