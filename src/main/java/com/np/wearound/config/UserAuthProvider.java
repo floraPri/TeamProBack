@@ -74,7 +74,6 @@ public class UserAuthProvider {
 		System.out.println("decoded.getIssuer() : " + decoded.getIssuer());
 		System.out.println("<<<UserAuthProvider - validateToken 2>>>");
 		UserDTO user = userService.findById(decoded.getIssuer());
-		System.out.println("user : " + user);
 		String role = decoded.getClaim("roles").asString();
 		System.out.println("role : " + role);
 		List<GrantedAuthority> authorities = new ArrayList<>();
