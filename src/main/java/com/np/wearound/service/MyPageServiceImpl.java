@@ -26,10 +26,10 @@ public class MyPageServiceImpl implements MyPageService {
 	
 	//구매목록 List
 	@Override
-	public List<BuyDTO> orderListAll() {
+	public List<BuyDTO> orderListAll(int userno) {
 		System.out.println("MyPageServiceImpl - orderListAll()");
 		
-		List<BuyDTO> buyList = sqlSession.selectList("com.np.wearound.mappers.BuyMapper.buyList");
+		List<BuyDTO> buyList = sqlSession.selectList("com.np.wearound.mappers.BuyMapper.buyList",userno);
 		
 		System.out.println(buyList);
 		
