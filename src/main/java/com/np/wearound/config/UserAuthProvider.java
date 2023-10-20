@@ -48,9 +48,10 @@ public class UserAuthProvider {
 		
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + 36000000);	//토큰 유효시간 1시간
-		String adminid = "admin";
+		UserDTO dto = userService.findById(id);
 		//JWT를 사용하려면 pom.xml에 java-jwt 추가
-		if(id.equals(adminid)) {//어드민 아이디를 받을경우 토큰내 권한을 다르게 설정
+		if(dto.getAuthority().equals("ROLE_ADMIN")) {//어드민 아이디를 받을경우 토큰내 권한을 다르게 설정
+			System.out.println("ROLE_ADMIN");
 			return JWT.create()
 					.withIssuer(id)
 					.withIssuedAt(now)
@@ -59,6 +60,7 @@ public class UserAuthProvider {
 					.sign(Algorithm.HMAC256(secretKey));
 		}
 		else {
+			System.out.println("ROLE_USER");
 			return JWT.create()
 					.withIssuer(id)
 					.withIssuedAt(now)
@@ -66,7 +68,6 @@ public class UserAuthProvider {
 					.withClaim("roles", "ROLE_USER")
 					.sign(Algorithm.HMAC256(secretKey));
 		}
-		
 	}
 	
 	public Authentication validateToken(String token) {	//org.springframework.security.core.Authentication
