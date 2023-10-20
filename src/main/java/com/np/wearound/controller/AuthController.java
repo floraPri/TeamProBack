@@ -67,14 +67,13 @@ public class AuthController {
 	//로그아웃
 	 @PostMapping("/logout")
 	    public void logout(@RequestHeader("Authorization") String token) {
-			System.out.println("logout");
+			System.out.println("<<< AuthController - logout() >>>");
 			System.out.println("token : "+token);
 		    // Extract and blacklist the token
 		    String authToken = token.replace("Bearer ", "");
 		    System.out.println("authToken : "+authToken);
 		    blacklistService.blacklistToken(authToken);
 		    System.out.println("블랙리스트 존재여부 : " + blacklistService.isTokenBlacklisted(authToken));
-		    System.out.println("모든 블랙리스트 토큰: " + blacklistService.getBlacklistedTokens());
 	    }
 	 //토큰 블랙처리 확인용도
 	 @GetMapping("/black")

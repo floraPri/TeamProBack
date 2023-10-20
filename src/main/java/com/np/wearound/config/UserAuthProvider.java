@@ -48,15 +48,24 @@ public class UserAuthProvider {
 		
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + 36000000);	//토큰 유효시간 1시간
-		
+		String adminid = "admin";
 		//JWT를 사용하려면 pom.xml에 java-jwt 추가
-		
-		return JWT.create()
-				.withIssuer(id)
-				.withIssuedAt(now)
-				.withExpiresAt(validity)
-				.withClaim("roles", "ROLE_USER")
-				.sign(Algorithm.HMAC256(secretKey));
+		if(id.equals(adminid)) {//어드민 아이디를 받을경우 토큰내 권한을 다르게 설정
+			return JWT.create()
+					.withIssuer(id)
+					.withIssuedAt(now)
+					.withExpiresAt(validity)
+					.withClaim("roles", "ROLE_ADMIN")
+					.sign(Algorithm.HMAC256(secretKey));
+		}
+		else {
+			return JWT.create()
+					.withIssuer(id)
+					.withIssuedAt(now)
+					.withExpiresAt(validity)
+					.withClaim("roles", "ROLE_USER")
+					.sign(Algorithm.HMAC256(secretKey));
+		}
 		
 	}
 	
@@ -71,14 +80,13 @@ public class UserAuthProvider {
 		
 		//JWT를 확인하기 위해 먼저 디코딩한다. 유효기간을 초과하면 예외가 발생한다.
 		DecodedJWT decoded = verifier.verify(token);	
-		System.out.println("decoded.getIssuer() : " + decoded.getIssuer());
+		System.out.println("토큰 사용자 이메일 : " + decoded.getIssuer());
 		System.out.println("<<<UserAuthProvider - validateToken 2>>>");
 		UserDTO user = userService.findById(decoded.getIssuer());
 		String role = decoded.getClaim("roles").asString();
-		System.out.println("role : " + role);
+		System.out.println("토큰 클레임 내 권한 정보 : " + role);
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(role));
-		System.out.println("authorities" + authorities);
 		//사용자가 내 데이터베이스에 존재하는지 확인
 		return new UsernamePasswordAuthenticationToken(user, null, authorities);
 	}

@@ -40,7 +40,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
          }
          if(elements.length == 2 && "Bearer".equals(elements[0])){
         	 if (tokenBlacklistService.isTokenBlacklisted(elements[1])) {//블랙리스트에 있는지 여부 확인
-                  System.out.println("blacktoken");
+                  System.out.println("--- JwtAuthFilter 블랙리스트에 존재하는 토큰이므로 요청 거절 ---");
                  response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                  return;
              }
@@ -52,7 +52,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
          }
       }
-      System.out.println("인증");
+      System.out.println("--- JwtAuthFilter 정상 통과 ---");
       filterChain.doFilter(request, response); // 필터 끝에서 doFilter() 메서드 호출
    }
    
