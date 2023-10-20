@@ -33,7 +33,7 @@ public class UserService {
 		System.out.println("<<<UserService - findById()>>>");
 		
 		User user = userRepository.findByEmail(email)
-			.orElseThrow(() -> new AppException("UnKnown user", HttpStatus.NOT_FOUND));
+			.orElseThrow(() -> new AppException("등록되지 않은 사용자", HttpStatus.NOT_FOUND));
 		
 	    UserDTO userDTO = new UserDTO();
 	    userDTO.setUserno(user.getUserno());
@@ -55,9 +55,6 @@ public class UserService {
 			.orElseThrow(() -> new AppException("아이디를 잘못 입력하셨습니다.", HttpStatus.NOT_FOUND));
 		//비밀번호 인코더를 사용하여 비밀번호가 일반 텍스트로 저장되는 것을 방지하지만 해시된 비밀번호는 읽을수 없다.
 		//import java.nio.CharBuffer; //주의
-		System.out.println("userData : " + user);
-		
-		System.out.println("아이디 사용가능");
 		if(passwordEncoder.matches(CharBuffer.wrap(credentialsDTO.getPassword()),user.getPassword())) {
 			if(user.getEnabled().equals("0") ) {
 				Login login = new Login();
