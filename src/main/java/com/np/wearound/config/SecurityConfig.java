@@ -37,7 +37,7 @@ public class SecurityConfig {
           .antMatchers("/login", "/register").permitAll() // 인증이 필요하지 않은 유일한 엔드포인트,리액트의 url과 일치시켜야 함
             .antMatchers("/**").permitAll()
             //.antMatchers(HttpMethod.POST,"/logout/").hasAnyRole("user")
-          //.antMatchers("/auction/*").hasAnyRole("USER")
+          //.antMatchers("/auction/*","/funding/*").hasAnyRole("USER")
             .anyRequest().authenticated() // 나머지 엔드포인트는 인증을 받아야 함            
             );
       
