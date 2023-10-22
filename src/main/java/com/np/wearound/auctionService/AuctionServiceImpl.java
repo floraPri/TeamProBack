@@ -18,8 +18,10 @@ import com.np.wearound.auctionDto.AuctionAddDTO;
 import com.np.wearound.auctionDto.AuctionBiderDTO;
 import com.np.wearound.auctionDto.AuctionBidingDTO;
 import com.np.wearound.auctionDto.AuctionDTO;
+import com.np.wearound.auctionDto.AuctionDetailDTO;
 import com.np.wearound.auctionDto.AuctionHostDTO;
 import com.np.wearound.auctionDto.AuctionListDTO;
+import com.np.wearound.auctionEntity.AuctionBidingEntity;
 import com.np.wearound.auctionEntity.AuctionEntity;
 
 @Service
@@ -148,4 +150,76 @@ public class AuctionServiceImpl implements AuctionService {
 		return dao.AuctionBider(userno);
 	}
 
+	// 경매 상세 - (진행페이지)
+	@Override
+	public AuctionDetailDTO Auction (int auctionno)
+			throws ServletException, IOException {
+		logger.info("<<< Serivce auction Start! >>>");
+		
+		AuctionEntity ent = Repo.findByAuctionno(auctionno);
+		AuctionDetailDTO dto = new AuctionDetailDTO();
+		
+        dto.setAuctionno(ent.getAuctionno());
+        dto.setUserno(ent.getUserno());
+        dto.setAuctiontitle(ent.getAuctiontitle());
+        dto.setImage(ent.getImage());
+        dto.setAuctioncontent(ent.getAuctioncontent());
+        dto.setBuynow(ent.getBuynow());
+        dto.setStartprice(ent.getStartprice());
+        dto.setLastprice(ent.getLastprice());
+        dto.setMinbid(ent.getMinbid());
+        dto.setAustarttime(ent.getAustarttime());
+        dto.setLasttime(ent.getLasttime());
+        dto.setCham(ent.getCham());
+        dto.setAddress(ent.getAddress());
+        dto.setName(ent.getName());
+        
+		return dto;
+	}
+	
+	// 경매 상세 - 입찰 시작
+	@Override
+	public int AuctionStart (AuctionBidingDTO dto)
+			throws ServletException, IOException {
+		logger.info("<<< Serivce AuctionStart Start! >>>");
+		
+		AuctionBidingEntity ent = new AuctionBidingEntity();
+		
+		ent.setAuctionno(dto.getAuctionno());
+		ent.setName(dto.getName());
+		
+		int insertCnt = 0;
+		
+		insertCnt = dao.AuctionStart(ent);
+		
+		return insertCnt;
+	}
+	
+	// 참여자 갱신
+	@Override
+	public int AuctionChamUpdate (AuctionBidingDTO dto)
+			throws ServletException, IOException {
+		logger.info("<<< Serivce AuctionChamUpdate Start! >>>");
+		AuctionEntity ent = new AuctionEntity();
+		ent.setAuctionno(dto.getAuctionno());
+		
+		int updateCnt = dao.AuctionChamUpdate(dto);
+		return updateCnt;
+	}
+	
+	//경매  상세 - 최종가 업데이트
+	@Override
+	public int AuctionPriceUpdate (AuctionBidingDTO dto)
+			throws ServletException, IOException {
+		logger.info("<<< Serivce AuctionStart Start! >>>");
+		
+		AuctionEntity ent = new AuctionEntity();
+		
+		ent.setAuctionno(dto.getAuctionno());
+		ent.setLastprice(dto.getLastprice());
+		ent.setName(dto.getName());
+		
+		int updateCnt = dao.AuctionPriceUpdate(ent);
+		return updateCnt;
+	}
 }

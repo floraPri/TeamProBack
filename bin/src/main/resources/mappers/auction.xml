@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.np.wearound.auctionDao.AuctionDao">
+	<insert id="AuctionAdd" parameterType="com.np.wearound.auctionEntity.AuctionEntity">
+		INSERT INTO Auction(auctionno, userno, auctiontitle, image, auctioncontent, buynow, startprice, lastprice, minbid) 
+		VALUES(auctionno_seq.NEXTVAL, 
+		       (SELECT userno FROM user_tbl WHERE userno = #{userno}), 
+		       #{auctiontitle}, 
+		       #{image}, 
+		       #{auctioncontent}, 
+		       #{buynow}, 
+		       #{startprice}, 
+		       #{lastprice}, 
+		       #{minbid}
+		)
+	</insert>
+	
+	<update id="AuctionEdit" parameterType="com.np.wearound.auctionEntity.AuctionEntity">
+		UPDATE Auction
+			SET
+			  auctiontitle = #{auctiontitle},
+			  auctioncontent = #{auctioncontent},
+			  buynow = #{buynow},
+			  startprice = #{startprice},
+			  minbid = #{minbid}
+			WHERE auctionno = #{auctionno}
+	</update>
+	
+	<select id="AuctionHost" parameterType="int" resultType="com.np.wearound.auctionDto.AuctionHostDTO">
+		SELECT auctionno
+			, userno
+			, auctiontitle
+			, image
+			, lastprice
+			, lasttime
+			, name
+		 FROM Auction
+		 WHERE userno = #{userno}
+	</select>
+	
+	<select id="AuctionBiding" parameterType="String" resultType="com.np.wearound.auctionDto.AuctionBidingDTO">
+		SELECT AuctionBiding.auctionbidderno
+			 , AuctionBiding.auctionno
+			 , AuctionBiding.name
+			 , Auction.auctiontitle
+			 , Auction.image
+			 , Auction.lastprice
+			 , Auction.lasttime
+		  FROM AuctionBiding
+		  JOIN Auction ON AuctionBiding.auctionno = Auction.auctionno
+		 WHERE AuctionBiding.name = #{name}	
+	</select>
+	
+	<select id="AuctionBider" parameterType="int" resultType="com.np.wearound.auctionDto.AuctionBiderDTO">
+		SELECT AuctionBidder.auctionbidderno
+		     , AuctionBidder.auctionno
+		     , AuctionBidder.userno
+		     , AuctionBidder.bidprice
+		     , AuctionBidder.auEndTime
+			 , Auction.auctiontitle
+			 , Auction.image
+		FROM AuctionBidder
+		JOIN Auction ON AuctionBidder.auctionno = Auction.auctionno
+		WHERE AuctionBidder.userno =  #{userno}
+	</select>
+	
+</mapper>

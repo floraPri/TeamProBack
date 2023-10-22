@@ -7,11 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +27,7 @@ import com.np.wearound.auctionDto.AuctionAddDTO;
 import com.np.wearound.auctionDto.AuctionBiderDTO;
 import com.np.wearound.auctionDto.AuctionBidingDTO;
 import com.np.wearound.auctionDto.AuctionDTO;
+import com.np.wearound.auctionDto.AuctionDetailDTO;
 import com.np.wearound.auctionDto.AuctionHostDTO;
 import com.np.wearound.auctionDto.AuctionListDTO;
 import com.np.wearound.auctionEntity.AuctionEntity;
@@ -40,24 +43,21 @@ public class AuctionController {
 	
 	@Autowired
 	private AuctionService service;
-	
-	// 집
-	//private final String uploadDirectory = "C:\\Users\\FloraPrincess\\Desktop\\DeV\\TeamProImage";
-	
-	// 학원
-//	 private final String uploadDirectory = "C:\\Users\\ICT02-14\\Desktop\\Dev\\TeamProImage";
 
-	private final String uploadDirectory = "\\TeamProImage";
-	
+	private final SimpMessagingTemplate messagingTemplate;
+
+    
 	// 경매 추가
 	@PostMapping(value="/auctionAdd", consumes="multipart/form-data")
 	public String auctionAdd(
+			@RequestParam("userno") int userno,
 		    @RequestParam("auctiontitle") String auctiontitle, 
 		    @RequestParam("auctioncontent") String auctioncontent,
 			@RequestParam("image") MultipartFile image,
 			@RequestParam("buynow") int buynow,
 			@RequestParam("startprice") int startprice,
-			@RequestParam("minbid") int minbid
+			@RequestParam("minbid") int minbid,
+			HttpServletRequest req
 //		    ,AuctionAddDTO dto <- 에러의 온상 기억해두자
 			)
 	    throws ServletException, IOException {
@@ -65,6 +65,8 @@ public class AuctionController {
 		
 		AuctionAddDTO dto = new AuctionAddDTO();
 
+		String uploadDirectory = req.getSession().getServletContext().getRealPath("/images");
+		//String uploadDirectory = "src/main/resources/images";
 		if (!image.isEmpty()) {
 			String fileName = image.getOriginalFilename();
 			logger.info("fileName fullPath={}", fileName);
@@ -74,10 +76,12 @@ public class AuctionController {
 
 			String fullPath = uploadDirectory + File.separator + uploadedFile;
 			image.transferTo(new File(fullPath));
-			dto.setImage(fullPath);
+			String filePath = "http://localhost:8081/images/"+uploadedFile+"/";
+			
+			dto.setImage(filePath);
 			}
 		
-		dto.setUserno(70); // 일단 하드 코딩
+		dto.setUserno(userno);
 		dto.setAuctiontitle(auctiontitle);
 		dto.setAuctioncontent(auctioncontent);
 		dto.setBuynow(buynow);
@@ -108,14 +112,17 @@ public class AuctionController {
 			@RequestParam("buynow") int buynow,
 			@RequestParam("startprice") int startprice,
 			@RequestParam("minbid") int minbid,
-			@RequestParam("auctionno") int auctionno
+			@RequestParam("auctionno") int auctionno,
+			HttpServletRequest req
 //		    ,AuctionAddDTO dto <- 에러의 온상 기억해두자
 			)			
 		   throws ServletException, IOException {
 		logger.info("<<< Controller auctionEdit Start! >>>");
 		
+		String uploadDirectory = req.getSession().getServletContext().getRealPath("/images");
+		
 		AuctionAddDTO dto = new AuctionAddDTO();
-
+		
 		if (!image.isEmpty()) {
 			String fileName = image.getOriginalFilename();
 			logger.info("fileName fullPath={}", fileName);
@@ -125,10 +132,11 @@ public class AuctionController {
 
 			String fullPath = uploadDirectory + File.separator + uploadedFile;
 			image.transferTo(new File(fullPath));
-			dto.setImage(fullPath);
+			String filePath = "http://localhost:8081/images/"+uploadedFile+"/";
+			
+			dto.setImage(filePath);
 			}
 		
-		//dto.setUserno(1); // 일단 하드 코딩
 		dto.setAuctionno(auctionno);
 		dto.setAuctiontitle(auctiontitle);
 		dto.setAuctioncontent(auctioncontent);
@@ -152,10 +160,6 @@ public class AuctionController {
 		List<AuctionListDTO> list = service.AuctionList();
 		return list;
 	}
-	
-//	// 경매 비활성
-//	@GetMapping(value ="enable")
-//	public 
 	
 	// 경매 호스트
 	@GetMapping(value="/auctionHost")
@@ -183,5 +187,45 @@ public class AuctionController {
 		logger.info("<<< Controller auctionBider Start! >>>");
 		
 		return service.AuctionBider(userno);
+	}
+	
+	// 경매 상세페이지 (진행 페이지)
+	@GetMapping(value="auctionDetail")
+	public AuctionDetailDTO auction(@RequestParam("auctionno")int auctionno)
+			throws ServletException, IOException {
+		logger.info("<<< Controller auctionBider Start! >>>");
+		
+		return service.Auction(auctionno);
+	}
+	
+	@PostMapping(value="acutionStart")
+	public String auctionStart(@RequestBody Map<String, Object> data)
+			throws ServletException, IOException {
+		logger.info("<<< Controller auctionStart Start! >>>");
+		
+		int auctionno = Integer.parseInt((String) data.get("auctionno"));
+		String name = (String) data.get("name");
+		int lastprice = Integer.parseInt((String) data.get("lastprice"));
+	    
+		AuctionBidingDTO dto = new AuctionBidingDTO();
+		dto.setAuctionno(auctionno);
+		dto.setName(name);
+		dto.setLastprice(lastprice);
+		
+		int insertCnt = service.AuctionStart(dto);
+		
+		if(insertCnt != 0) { //경매 중 상태 추가
+			service.AuctionChamUpdate(dto);
+			service.AuctionPriceUpdate(dto);
+			System.out.println("입찰가 업데이트!");
+			messagingTemplate.convertAndSend("/topic/newBidAmount", lastprice);
+		}
+		else { // 이미 참여 중인 경우, 업데이트만
+			service.AuctionPriceUpdate(dto);
+			System.out.println("입찰가 업데이트!");
+			messagingTemplate.convertAndSend("/topic/newBidAmount", lastprice);
+		}
+		
+		return "auctionStart";
 	}
 }
