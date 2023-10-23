@@ -14,15 +14,14 @@ import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry config) {
-    	System.out.println("웹소켓 브로커");
-        config.enableSimpleBroker("/topic");
-    }
+	@Override
+	public void configureMessageBroker(MessageBrokerRegistry config) {
+	    config.setApplicationDestinationPrefixes("/app")
+	          .enableSimpleBroker("/topic", "/queue");
+	}
 
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-    	System.out.println("엔드포인트 체크");
-        registry.addEndpoint("/ws").setAllowedOrigins("*").withSockJS();
-    }
+	@Override
+	public void registerStompEndpoints(StompEndpointRegistry registry) {
+	    registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
+	}
 }
