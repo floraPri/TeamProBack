@@ -38,7 +38,7 @@ public class MyPageServiceImpl implements MyPageService {
 		return buyList;
 	}
 
-	//내가 등록한 피드목록 불러오기
+	//내가 등록한 피드목록 불러오기..
 	@Override
 	public List<Feed> feedList(int userno) {
 		System.out.println("MyPageServiceImpl - feedList()");
