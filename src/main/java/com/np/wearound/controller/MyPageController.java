@@ -35,14 +35,6 @@ public class MyPageController {
 	//http://localhost:8081/myPage/myp/
 	//마이페이지 메인
 	
-	@GetMapping("/myp")
-	public String myPageMain(@RequestParam int userno)
-			throws ServletException, IOException {
-		logger.info("<<< MyPageController - MyPageMain >>>");
-		System.out.println("고객 아이디 : "+userno);
-		
-		return "myp";
-	}
 	
 	
 	//구매목록 페이지
