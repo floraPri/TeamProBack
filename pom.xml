@@ -120,6 +120,7 @@
 	</dependency>
     
     <!-- 웹 소켓 연결 -->
+    
     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-messaging</artifactId>
@@ -127,7 +128,7 @@
     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-websocket</artifactId>
-    </dependency>
+    </dependency>  
         
 	</dependencies>
 

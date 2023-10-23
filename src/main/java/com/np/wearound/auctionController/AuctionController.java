@@ -13,6 +13,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
 import com.np.wearound.auctionDto.AuctionAddDTO;
 import com.np.wearound.auctionDto.AuctionBiderDTO;
@@ -34,6 +36,8 @@ import com.np.wearound.auctionEntity.AuctionEntity;
 import com.np.wearound.auctionService.AuctionService;
 import lombok.RequiredArgsConstructor;
 
+
+@EnableWebSocket
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value="/auction")
@@ -43,9 +47,9 @@ public class AuctionController {
 	
 	@Autowired
 	private AuctionService service;
-
-	private final SimpMessagingTemplate messagingTemplate;
-
+	
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
     
 	// 경매 추가
 	@PostMapping(value="/auctionAdd", consumes="multipart/form-data")
@@ -218,12 +222,12 @@ public class AuctionController {
 			service.AuctionChamUpdate(dto);
 			service.AuctionPriceUpdate(dto);
 			System.out.println("입찰가 업데이트!");
-			messagingTemplate.convertAndSend("/topic/newBidAmount", lastprice);
+			messagingTemplate.convertAndSend("/topic/acutionStart", dto);
 		}
 		else { // 이미 참여 중인 경우, 업데이트만
 			service.AuctionPriceUpdate(dto);
 			System.out.println("입찰가 업데이트!");
-			messagingTemplate.convertAndSend("/topic/newBidAmount", lastprice);
+			messagingTemplate.convertAndSend("/topic/acutionStart", dto);
 		}
 		
 		return "auctionStart";

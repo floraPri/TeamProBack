@@ -1,4 +1,4 @@
-package com.np.wearound.auctionController;
+package com.np.wearound;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
