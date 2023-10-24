@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.np.wearound.entities.Funding;
+import com.np.wearound.entities.FundingRewards;
 import com.np.wearound.repository.FundingRepository;
+import com.np.wearound.repository.FundingRewardsRepository;
 import com.np.wearound.repository.UserRepository;
 
 @Service
@@ -19,6 +21,8 @@ public class FundingServiceImpl implements FundingService{
 	@Autowired
 	private FundingRepository funding;
 
+	@Autowired
+	private FundingRewardsRepository reward;
 	
 	@Override
 	public List<Funding> fundinglist() {
@@ -31,9 +35,17 @@ public class FundingServiceImpl implements FundingService{
 
 	@Override
 	public Optional<Funding> FundingDetail(int fundingcode) {
-		System.out.println(" service - detail ");
+		System.out.println(" service - FundingDetail ");
 		
 		return funding.findById(fundingcode);
+	}
+	
+	@Override
+	public List<FundingRewards> Rewardslist(int fundingcode) {
+		System.out.println(" service - Rewardslist");
+		System.out.println(fundingcode);
+		
+		return reward.findByFundingcode(fundingcode);
 	}
 
 	@Override
@@ -55,12 +67,23 @@ public class FundingServiceImpl implements FundingService{
 	}
 
 	@Override
-	public void FundingAdd(Funding dto) {
-		System.out.println(" FundingService - fundingAdd ");
-		System.out.println("funding " + dto);
+	public Funding FundingAdd(Funding ent) {
+		System.out.println(" FundingService - FundingAdd ");
+		System.out.println("funding " + ent);
 		
-		funding.save(dto);
+		 Funding fund= funding.save(ent);
+		System.out.println("fund" + fund);
+		return fund;
 	}
+
+	@Override
+	public void RewardAdd(FundingRewards ent) {
+		System.out.println(" service - RewardAdd ");
+		System.out.println(" reward " + ent );
+		
+		reward.save(ent);
+	}
+
 
 
 }

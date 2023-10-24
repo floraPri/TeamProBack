@@ -27,8 +27,10 @@ public class FundingDTO {
 	private int fundingcode; 
 	private String category; 
 	private String title; 
+	private String subtitle; 
 	private String image; 
 	private String content; 
+	private String subcontent; 
 	private int userno; 
 	private Date startdate; 
 	private Date enddate;

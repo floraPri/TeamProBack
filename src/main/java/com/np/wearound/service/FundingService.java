@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.np.wearound.entities.Funding;
+import com.np.wearound.entities.FundingRewards;
 
 
 public interface FundingService {
@@ -13,6 +14,7 @@ public interface FundingService {
 	
 	// detail
 	public Optional<Funding> FundingDetail(int fundingcode);
+	public List<FundingRewards> Rewardslist(int fundingcode);
 	
 	// contribute
 	public void ContributeFunding(int userno) ; 
@@ -25,9 +27,10 @@ public interface FundingService {
 	public List<Funding> Participantlist();
 	
 	
-	// add
-	// edit
-	public void FundingAdd(Funding dto);
-	
+	// add and edit
+	// funding
+	public Funding FundingAdd(Funding ent);
+	// rewards
+	public void RewardAdd(FundingRewards ent);
 	// delete?
 }

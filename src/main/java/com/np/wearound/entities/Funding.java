@@ -34,8 +34,10 @@ public class Funding {
 //	fundingcode NUMBER PRIMARY KEY, -- 펀딩번호
 //	category VARCHAR2(30) NOT NULL, -- 펀딩카테고리
 //	title VARCHAR2(50) NOT NULL, -- 타이틀
+//	subtitle VARCHAR2(40) NOT NULL,	
 //	image VARCHAR2(100) NOT NULL, -- 첨부 이미지
 //	content CLOB NOT NULL, -- 펀딩 내용
+//	subcontent VARCHAR2(100) NOT NULL, -- 리스트에 보일 본문 요약	
 //	userno NUMBER NOT NULL, -- 펀딩 진행하는 user
 //	startdate DATE DEFAULT SYSDATE NOT NULL, -- 등록일(시작일)
 //	enddate DATE NOT NULL, -- 마감일
@@ -47,8 +49,10 @@ public class Funding {
 	private int fundingcode; 
 	private String category; 
 	private String title; 
+	private String subtitle; 
 	private String image; 
 	private String content; 
+	private String subcontent; 
 	private int userno; 
 	private Date startdate; 
 	private Date enddate;
