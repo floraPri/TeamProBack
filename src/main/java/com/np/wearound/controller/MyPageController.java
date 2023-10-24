@@ -36,7 +36,6 @@ public class MyPageController {
 	//마이페이지 메인
 	
 	
-	
 	//구매목록 페이지
 	@GetMapping("/order")
 	public List<BuyDTO> orderList(@RequestParam int userno)
