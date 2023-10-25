@@ -219,7 +219,7 @@ public class AuctionServiceImpl implements AuctionService {
 		ent.setLastprice(dto.getLastprice());
 		ent.setName(dto.getName());
 		
-		int updateCnt = dao.AuctionPriceUpdate(ent);
-		return updateCnt;
+		return dao.AuctionPriceUpdate(ent);
+
 	}
 }

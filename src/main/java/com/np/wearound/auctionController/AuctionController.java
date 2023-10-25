@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -81,8 +83,9 @@ public class AuctionController {
 			String fullPath = uploadDirectory + File.separator + uploadedFile;
 			image.transferTo(new File(fullPath));
 			String filePath = "http://localhost:8081/images/"+uploadedFile+"/";
-			
+			System.out.println(filePath);
 			dto.setImage(filePath);
+			
 			}
 		
 		dto.setUserno(userno);
@@ -101,7 +104,7 @@ public class AuctionController {
 	
 	// 수정 위한 상세페이지
 	@GetMapping(value="/auctionEdit")
-	public AuctionDTO auctionDetail(@RequestParam("auctionno")int auctionno)
+	public AuctionDTO auctionEdit(@RequestParam("auctionno")int auctionno)
 			throws ServletException, IOException {
 		logger.info(">>> Controller auctionDetail Start! <<<");
 		return service.AuctionDetail(auctionno);
@@ -195,19 +198,21 @@ public class AuctionController {
 	
 	// 경매 상세페이지 (진행 페이지)
 	@GetMapping(value="auctionDetail")
-	public AuctionDetailDTO auction(@RequestParam("auctionno")int auctionno)
+	public AuctionDetailDTO auctionDetail(@RequestParam("auctionno")int auctionno)
 			throws ServletException, IOException {
 		logger.info("<<< Controller auctionBider Start! >>>");
-		
+		System.out.println("auctionno: " + auctionno);
 		return service.Auction(auctionno);
 	}
 	
-	@PostMapping(value="acutionStart")
-	public String auctionStart(@RequestBody Map<String, Object> data)
+    @MessageMapping("/send/message")
+    @SendTo("/topic/receive/message")
+	@PostMapping(value="auctionStart")
+	public String auctionStart(@RequestBody Map<String, String> data)
 			throws ServletException, IOException {
 		logger.info("<<< Controller auctionStart Start! >>>");
 		
-		int auctionno = Integer.parseInt((String) data.get("auctionno"));
+		int auctionno = Integer.parseInt(data.get("auctionno"));
 		String name = (String) data.get("name");
 		int lastprice = Integer.parseInt((String) data.get("lastprice"));
 	    
@@ -217,19 +222,26 @@ public class AuctionController {
 		dto.setLastprice(lastprice);
 		
 		int insertCnt = service.AuctionStart(dto);
-		
 		if(insertCnt != 0) { //경매 중 상태 추가
 			service.AuctionChamUpdate(dto);
 			service.AuctionPriceUpdate(dto);
 			System.out.println("입찰가 업데이트!");
-			messagingTemplate.convertAndSend("/topic/acutionStart", dto);
+//			messagingTemplate.convertAndSend("/topic/acutionStart", dto);
 		}
 		else { // 이미 참여 중인 경우, 업데이트만
 			service.AuctionPriceUpdate(dto);
 			System.out.println("입찰가 업데이트!");
-			messagingTemplate.convertAndSend("/topic/acutionStart", dto);
+//			messagingTemplate.convertAndSend("/topic/acutionStart", dto);
 		}
-		
 		return "auctionStart";
 	}
+
+//    @MessageMapping("/send/message")
+//    @SendTo("/topic/receive/message")
+//    public String handleReceivedMessage(String message) {
+//        // 여기에서 message를 처리
+//        System.out.println("메세지 수신: " + message);
+//        return message;
+//    }
+	
 }
