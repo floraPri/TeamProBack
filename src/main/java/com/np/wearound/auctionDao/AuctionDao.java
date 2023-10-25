@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.np.wearound.auctionDto.AuctionBiderDTO;
 import com.np.wearound.auctionDto.AuctionBidingDTO;
 import com.np.wearound.auctionDto.AuctionHostDTO;
+import com.np.wearound.auctionEntity.AuctionBidingEntity;
 import com.np.wearound.auctionEntity.AuctionEntity;
 
 @Mapper
@@ -21,4 +22,10 @@ public interface AuctionDao {
 	public List<AuctionBidingDTO> AuctionBiding(String name);
 	
 	public List<AuctionBiderDTO> AuctionBider(int userno);
+	
+	public int AuctionStart(AuctionBidingEntity ent);
+	
+	public int AuctionChamUpdate(AuctionBidingDTO dto);
+	
+	public int AuctionPriceUpdate(AuctionEntity ent);
 }

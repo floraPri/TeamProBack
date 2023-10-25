@@ -6,7 +6,7 @@
 <mapper namespace="com.np.wearound.mappers.BuyMapper">
 	
 	<!--구매목록 -->
-	<select id="buyList" resultType="com.np.wearound.dto.BuyDTO">
+	<select id="buyList" parameterType="int" resultType="com.np.wearound.dto.BuyDTO">
 		<![CDATA[ 
 			SELECT b.product_buycode AS buycode
 				 , p.product_name AS product_name
@@ -21,6 +21,7 @@
 			 FROM buy_tbl b, user_tbl u,product_tbl p
 			WHERE b.product_code = p.product_code
 			  AND b.buyer = u.userno
+			  AND u.userno = #{userno}
 		]]>
 	</select>
 	
