@@ -27,6 +27,6 @@ public interface MyPageService {
 			throws ServletException, IOException;
 	
 	//피드 삭제
-	public int delete(int feedcode)
+	public void delete(int feedcode)
 			throws ServletException, IOException;
 }	

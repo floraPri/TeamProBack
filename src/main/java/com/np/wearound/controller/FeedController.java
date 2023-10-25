@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,14 +61,6 @@ public class FeedController {
 			) 
 		throws ServletException, IOException {
 		logger.info("<<< FeedController -  feedAdd(피드 등록 페이지)>>>");
-		logger.info("<<< FeedController -  feedAdd(피드 등록 페이지)>>>");
-		logger.info("<<< FeedController -  feedAdd(피드 등록 페이지)>>>");
-		System.out.println("======================================");
-		System.out.println("피드제목 : "+title);
-		System.out.println("피드본문내용 : "+content);
-		System.out.println("피드이미지 : "+image);
-		System.out.println("회원번호 : "+userno);
-		System.out.println("======================================");
 		
 		FeedAddDTO dto = new FeedAddDTO();
 		
@@ -90,15 +84,31 @@ public class FeedController {
 		dto.setUserno(userno);
 		dto.setTitle(title);
 		dto.setContent(content);
-		
-		System.out.println(dto);
-		
+				
 		service.saveFeed(dto);
-		
-		System.out.println("<<<<<<< 컨트롤러 - 등록완료 >>>>>>>");
 		
 		return "redirect:/myPage/myp";
 	}
 	
+	//피드 삭제
+	@DeleteMapping("/myp/{feedcode}")
+	public String feedDelete(@PathVariable(name="feedcode") int feedcode) 
+			throws ServletException, IOException {
+		logger.info("<<< FeedController -  feedAdd(피드 삭제)>>>");
+		
+		System.out.println("feedcode : "+feedcode);
+		
+		service.delete(feedcode);
+		System.out.println("Delete성공");
+		return "redirect:/myPage/myp";
+	}
+	
+	//피드 수정
+	
+	
+	
+	
+	
+	//피드 상세(select 1건)
 	
 }

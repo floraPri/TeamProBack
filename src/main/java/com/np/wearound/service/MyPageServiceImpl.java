@@ -74,11 +74,13 @@ public class MyPageServiceImpl implements MyPageService {
 		return null;
 	}
 
+	//피드 삭제
 	@Override
-	public int delete(int feedcode) 
+	public void delete(int feedcode) 
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		return 0;
+		System.out.println("MyPageServiceImpl - (서비스) 피드삭제");
+		
+		dao.deleteById(feedcode);
 	}
 	
 	
