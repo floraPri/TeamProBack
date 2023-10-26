@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.auth0.jwt.JWT;
@@ -49,9 +50,9 @@ public class AuthController {
 		user.setToken(userAuthProvider.createToken(user.getEmail()));
 		System.out.println("token:" + user.getToken());
 		
-		
 		return ResponseEntity.ok(user);	//새로운 jwt를 반환
 	}
+	
 	//회원가입
 	@PostMapping("/register")
 	public ResponseEntity<User> register(@RequestBody SignUpDTO signUpDTO) {
@@ -66,15 +67,39 @@ public class AuthController {
 	}
 	//로그아웃
 	 @PostMapping("/logout")
-	    public void logout(@RequestHeader("Authorization") String token) {
-			System.out.println("<<< AuthController - logout() >>>");
-			System.out.println("token : "+token);
-		    // Extract and blacklist the token
-		    String authToken = token.replace("Bearer ", "");
-		    System.out.println("authToken : "+authToken);
-		    blacklistService.blacklistToken(authToken);
-		    System.out.println("블랙리스트 존재여부 : " + blacklistService.isTokenBlacklisted(authToken));
-	    }
+    public void logout(@RequestHeader("Authorization") String token) {
+		System.out.println("<<< AuthController - logout() >>>");
+		System.out.println("token : "+token);
+	    String authToken = token.replace("Bearer ", "");
+	    System.out.println("authToken : "+authToken);
+	    blacklistService.blacklistToken(authToken);
+	    System.out.println("블랙리스트 존재여부 : " + blacklistService.isTokenBlacklisted(authToken));
+    }
+	 
+	 @GetMapping("/user/userdetail")
+	 public User userdetail(@RequestParam String userno) {
+			System.out.println("<<< AuthController - userdetail() >>>");
+			System.out.println(userno);
+			return userService.userDetail(Integer.parseInt(userno));
+	 }
+	 
+	 @PostMapping("/user/userupdate")
+	 public ResponseEntity<Object> userupdate(@RequestBody SignUpDTO signUpDTO ) {
+			System.out.println("<<< AuthController - userupdate() >>>");
+			//엔티티를 생성할 때 새 엔티티를 찾을 수 있는 URL과 함께 201 HTTP 코드를 변환하는 것이 가장 좋다.
+//			signUpDTO.setToken(userAuthProvider.createToken(user.getEmail()));
+			userService.update(signUpDTO);
+			
+			return ResponseEntity.ok().build();
+	 }
+	 
+	 @GetMapping("/user/userdelete")
+	 public void userdelete(@RequestParam String userno) {
+			System.out.println("<<< AuthController - userdelete() >>>");
+			System.out.println(userno);
+			userService.delete(Integer.parseInt(userno));
+	 }
+	 
 	 //토큰 블랙처리 확인용도
 	 @GetMapping("/black")
 	 	public UserDTO black(@RequestHeader("Authorization") String token) {
@@ -85,7 +110,6 @@ public class AuthController {
 		 	DecodedJWT decoded = verifier.verify(authToken);
 			System.out.println("logout");
 			System.out.println("token : "+authToken);
-		    // Extract and blacklist the token
 		    System.out.println("authToken : " + authToken);
 		    System.out.println("블랙리스트 존재여부 : " + blacklistService.isTokenBlacklisted(authToken));
 		    System.out.println("모든 블랙리스트 토큰: " + blacklistService.getBlacklistedTokens());

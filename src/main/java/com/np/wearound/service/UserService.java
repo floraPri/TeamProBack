@@ -96,4 +96,43 @@ public class UserService {
 		return saveUser;
 		
 	}
+	
+	public User userDetail(int userno) {
+		System.out.println("<<<UserService - login()>>>");
+		
+		User user = userRepository.findById(userno)
+			.orElseThrow(() -> new AppException("아이디가 없음.", HttpStatus.NOT_FOUND));
+		
+		return user;
+				
+	}
+	
+	public void update(SignUpDTO userDTO) {
+		System.out.println("<<<userService - register>>>");
+//		System.out.println("token: " + userDTO.getToken());
+		
+		Optional<User> optionalUser = userRepository.findByEmail(userDTO.getEmail());
+		
+		if(!optionalUser.isPresent()) {
+			throw new AppException("없는 회원입니다.",HttpStatus.BAD_REQUEST);
+			
+		}
+		
+		User user = userDetail(userDTO.getUserno());
+		user.setEmail(userDTO.getEmail());
+		user.setPhone(userDTO.getPhone());
+		user.setName(userDTO.getName());
+		
+		//passwordEncoder를 사용하여 암호를 일반텍스로 저장한다.
+		user.setPassword(passwordEncoder.encode(CharBuffer.wrap(userDTO.getPassword())));
+		
+		userRepository.save(user);
+		
+	}
+	
+	public void delete(int userno) {
+		System.out.println("<<<userService - delete>>>");
+		userRepository.deleteById(userno);
+		
+	}
 }
