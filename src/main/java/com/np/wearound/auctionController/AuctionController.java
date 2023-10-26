@@ -14,7 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,7 +52,7 @@ public class AuctionController {
 	@Autowired
 	private AuctionService service;
 	
-	@Autowired
+
 	private SimpMessagingTemplate messagingTemplate;
     
 	// 경매 추가
@@ -196,17 +198,26 @@ public class AuctionController {
 		return service.AuctionBider(userno);
 	}
 	
+	 @Autowired
+    public AuctionController(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
+	
 	// 경매 상세페이지 (진행 페이지)
+	@MessageMapping("/send/bid/{auctionno}")
+	@SendTo("/topic/receive/bid/{auctionno}")
 	@GetMapping(value="auctionDetail")
-	public AuctionDetailDTO auctionDetail(@RequestParam("auctionno")int auctionno)
+	public AuctionDetailDTO auctionDetail(@DestinationVariable int auctionno, @Payload AuctionDetailDTO message)
 			throws ServletException, IOException {
 		logger.info("<<< Controller auctionBider Start! >>>");
-		System.out.println("auctionno: " + auctionno);
+		String topic = "/topic/bid/message/" + auctionno;
+		
+        // 여기에서 message를 처리
+        messagingTemplate.convertAndSend(topic, message);
+        System.out.println("메세지 수신: " + message);
 		return service.Auction(auctionno);
 	}
 	
-    @MessageMapping("/send/message")
-    @SendTo("/topic/receive/message")
 	@PostMapping(value="auctionStart")
 	public String auctionStart(@RequestBody Map<String, String> data)
 			throws ServletException, IOException {
@@ -215,7 +226,7 @@ public class AuctionController {
 		int auctionno = Integer.parseInt(data.get("auctionno"));
 		String name = (String) data.get("name");
 		int lastprice = Integer.parseInt((String) data.get("lastprice"));
-	    
+
 		AuctionBidingDTO dto = new AuctionBidingDTO();
 		dto.setAuctionno(auctionno);
 		dto.setName(name);
@@ -226,16 +237,20 @@ public class AuctionController {
 			service.AuctionChamUpdate(dto);
 			service.AuctionPriceUpdate(dto);
 			System.out.println("입찰가 업데이트!");
-//			messagingTemplate.convertAndSend("/topic/acutionStart", dto);
+
 		}
 		else { // 이미 참여 중인 경우, 업데이트만
 			service.AuctionPriceUpdate(dto);
 			System.out.println("입찰가 업데이트!");
-//			messagingTemplate.convertAndSend("/topic/acutionStart", dto);
+
 		}
+
 		return "auctionStart";
 	}
 
+    
+    
+    
 //    @MessageMapping("/send/message")
 //    @SendTo("/topic/receive/message")
 //    public String handleReceivedMessage(String message) {
