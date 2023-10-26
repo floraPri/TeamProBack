@@ -23,10 +23,15 @@ public interface MyPageService {
 			throws ServletException, IOException;
 	
 	//피드 1건 select
-	public FeedDTO get(int feedcode)
+	public Feed findById(int feedcode)
 			throws ServletException, IOException;
 	
 	//피드 삭제
 	public void delete(int feedcode)
+			throws ServletException, IOException;
+	
+	
+	//피드 수정
+	public void updateFeed(FeedAddDTO feedDTO)
 			throws ServletException, IOException;
 }	

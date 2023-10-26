@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,15 +36,12 @@ public class FeedController {
 	
 	@Autowired
 	private MyPageServiceImpl service;
-	
-	
+
 	//내가 등록한 피드 목록
 	@GetMapping("/myp")
 	public List<Feed> feedList(@RequestParam int userno) 
 			throws ServletException, IOException {
-		logger.info("<<< FeedController -  feedList(피드 마이페이지)>>>");
-		System.out.println("고객 고유번호"+ userno);
-		
+		logger.info("<<< FeedController -  feedList(피드 마이페이지)>>>");		
 		List<Feed> myFeedList = service.feedList(userno);
 		System.out.println("FeedController");
 		return myFeedList;
@@ -103,12 +101,63 @@ public class FeedController {
 		return "redirect:/myPage/myp";
 	}
 	
-	//피드 수정
-	
-	
-	
-	
+	//피드 상세(select 1건)
+//	@RequestMapping("/feedEditPage/{feedcode}")
+//	public String editFeedPage(@PathVariable(name="feedcode") int feedcode,Model model) 
+//			throws ServletException, IOException {
+//		
+//		Feed feed = service.get(feedcode);
+//		model.addAttribute("feed",feed);
+//		return "feedEditPage";
+//	}
 	
 	//피드 상세(select 1건)
+	@GetMapping(value="/feedEditPage")
+	public Feed fetchFeedById(@RequestParam("feedcode") int feedcode) 
+			throws ServletException, IOException {
+		logger.info("<<< FeedController -  fetchFeedById(피드 상세)>>>");
+		Feed feed = service.findById(feedcode);
+		System.out.println("정상적으로 전송");
+		return feed;
+	}
+	
+	//피드 수정
+	@PostMapping(value="/feedEditPage", consumes="multipart/form-data")
+	public String feedEdit(
+			@RequestParam("feedcode") int feedcode,
+			@RequestParam("feedtitle") String title,
+			@RequestParam("feedcontent") String content,
+			@RequestParam("image") MultipartFile image,
+			@RequestParam("userno") int userno,
+			HttpServletRequest req
+			) throws ServletException, IOException {
+		logger.info("<<< FeedController -  feedEdit(피드 수정)>>>");
+		String upLoadDirectory = req.getSession().getServletContext().getRealPath("/images");
+		
+		FeedAddDTO dto = new FeedAddDTO();
+		if(!image.isEmpty()) {
+			String fileName = image.getOriginalFilename();
+			logger.info("fileName fullPath={}", fileName);
+			// 저장할 파일 경로
+			
+			File uploadedFile = new File(fileName);
+			
+			String fullPath = upLoadDirectory + File.separator + uploadedFile;
+			image.transferTo(new File(fullPath));
+			String filePath = "http://localhost:8081/images/"+uploadedFile+"/";
+			dto.setImage(filePath);
+		}
+		
+		dto.setFeedcode(feedcode);
+		dto.setUserno(userno);
+		dto.setTitle(title);
+		dto.setContent(content);
+				
+		service.updateFeed(dto);
+		System.out.println("수정성공///");
+		
+		return "redirect:/myPage/myp";
+	} 
+	
 	
 }

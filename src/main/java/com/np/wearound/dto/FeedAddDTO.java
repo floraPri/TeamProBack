@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class FeedAddDTO {
+	private int feedcode;
 	private String title;       	//   VARCHAR2(100) NOT NULL,
 	private String content;     	//CLOB NOT NULL,
 	private String image;         	//VARCHAR2(100) NOT NULL,
