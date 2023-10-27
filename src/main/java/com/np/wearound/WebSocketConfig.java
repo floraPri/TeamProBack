@@ -22,6 +22,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
     	System.out.println("엔드포인트 체크");
+    	registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
     	registry.addEndpoint("/auction/auctionDetail").setAllowedOriginPatterns("*").withSockJS();
 
     }

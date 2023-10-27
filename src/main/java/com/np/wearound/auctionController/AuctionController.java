@@ -3,6 +3,10 @@ package com.np.wearound.auctionController;
 import java.util.List;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +45,6 @@ import com.np.wearound.auctionService.AuctionService;
 import lombok.RequiredArgsConstructor;
 
 
-@EnableWebSocket
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value="/auction")
@@ -191,14 +194,14 @@ public class AuctionController {
 	
 	// 경매 게스트 - 낙찰자
 	@GetMapping(value="/auctionGuest_1")
-	public List<AuctionBiderDTO> auctionBider(@RequestParam("userno")int userno)
+	public List<AuctionBiderDTO> auctionBider(@RequestParam("name")String name)
 			throws ServletException, IOException {
 		logger.info("<<< Controller auctionBider Start! >>>");
 		
-		return service.AuctionBider(userno);
+		return service.AuctionBider(name);
 	}
 	
-	 @Autowired
+	@Autowired
     public AuctionController(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
     }
@@ -232,31 +235,71 @@ public class AuctionController {
 		dto.setName(name);
 		dto.setLastprice(lastprice);
 		
-		int insertCnt = service.AuctionStart(dto);
-		if(insertCnt != 0) { //경매 중 상태 추가
+		Map<String, Object> map = new HashMap<>();
+		map.put("auctionno", auctionno);
+		map.put("name", name);
+		
+		int selectCnt = service.AuctionBidfind(map);
+		
+		if(selectCnt == 0) { //경매 중 상태 추가
+			service.AuctionStart(dto);
 			service.AuctionChamUpdate(dto);
 			service.AuctionPriceUpdate(dto);
 			System.out.println("입찰가 업데이트!");
-
 		}
 		else { // 이미 참여 중인 경우, 업데이트만
 			service.AuctionPriceUpdate(dto);
 			System.out.println("입찰가 업데이트!");
-
 		}
 
 		return "auctionStart";
 	}
-
-    
-    
-    
-//    @MessageMapping("/send/message")
-//    @SendTo("/topic/receive/message")
-//    public String handleReceivedMessage(String message) {
-//        // 여기에서 message를 처리
-//        System.out.println("메세지 수신: " + message);
-//        return message;
-//    }
 	
+	@PostMapping(value = "auctionBiderAdd")
+	public String auctionBiderAdd(@RequestBody Map<String, Object> data) 
+	        throws ServletException, IOException, ParseException {
+	    logger.info("<<< Controller auctionBiderAdd Start! >>>");
+	    int auctionno = Integer.parseInt(String.valueOf(data.get("auctionno")));
+	    System.out.println("auctionno : " + auctionno);
+	    String name = (String) data.get("name");
+	    int bidprice = Integer.parseInt(String.valueOf(data.get("bidprice")));
+	    
+	    if (auctionno != 0) {
+	    	System.err.println("낙찰자 시스템 시작");
+		    String auendtimeStr = (String) data.get("auendtime");
+		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		    Date parsedDate = dateFormat.parse(auendtimeStr);
+		    Timestamp auendtime = new Timestamp(parsedDate.getTime());
+		    
+		    AuctionBiderDTO dto = new AuctionBiderDTO();
+		    dto.setAuctionbidderno(auctionno);
+		    dto.setAuctionno(auctionno);
+		    dto.setName(name);
+		    dto.setBidprice(bidprice);
+		    dto.setAuendtime(auendtime);
+		    
+		    service.AuctionBiderAdd(dto);	
+		    
+		    AuctionDTO Audto = new AuctionDTO();
+		    
+		    Audto.setAuctionno(auctionno);
+		    Audto.setName(name);
+		    
+		    service.AuctionSetEndTime(Audto);
+		    
+		    return "auctionBiderAdd";
+	    } else {
+	    	System.err.println("낙찰자 시스템 오류!");
+	    	return "auctionBiderAdd";
+	    }
+	}
+	
+	@GetMapping(value = "hostAndGuestChatInfo")
+	public AuctionDTO hostAndGuestChatInfo(@RequestParam("auctionno")int auctionno)
+			throws ServletException, IOException {
+		logger.info("<<< Controller hostAndGuestChatInfo Start! >>>");
+
+		return service.hostAndGuestChatInfo(auctionno);
+	}
+
 }

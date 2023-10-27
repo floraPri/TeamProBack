@@ -42,12 +42,13 @@ public class AuctionEntity {
     private int cham;
     private String address;
     private String name;
+    private String hostname;
     private int status;
     
     public AuctionEntity() {}
 
     public AuctionEntity(int auctionno, int userno, String auctiontitle, String image, String auctioncontent, int buynow,
-            int startprice, int lastprice, int minbid, Date austarttime, Timestamp lasttime, int cham, String address, String name, int status) {
+            int startprice, int lastprice, int minbid, Date austarttime, Timestamp lasttime, int cham, String address, String name, String hostname, int status) {
         super();
         this.auctionno = auctionno;
         this.userno = userno;
@@ -63,6 +64,7 @@ public class AuctionEntity {
         this.cham = cham;
         this.address = address;
         this.name = name;
+        this.hostname = hostname;
         this.status = status;
     }
 }

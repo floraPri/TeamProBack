@@ -3,6 +3,7 @@ package com.np.wearound.auctionService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.np.wearound.auctionDao.AuctionBiderRepository;
 import com.np.wearound.auctionDao.AuctionDao;
 import com.np.wearound.auctionDao.AuctionRepository;
 import com.np.wearound.auctionDto.AuctionAddDTO;
@@ -21,6 +23,7 @@ import com.np.wearound.auctionDto.AuctionDTO;
 import com.np.wearound.auctionDto.AuctionDetailDTO;
 import com.np.wearound.auctionDto.AuctionHostDTO;
 import com.np.wearound.auctionDto.AuctionListDTO;
+import com.np.wearound.auctionEntity.AuctionBidderEntity;
 import com.np.wearound.auctionEntity.AuctionBidingEntity;
 import com.np.wearound.auctionEntity.AuctionEntity;
 
@@ -34,6 +37,9 @@ public class AuctionServiceImpl implements AuctionService {
 	
 	@Autowired
 	private AuctionRepository Repo;
+	
+	@Autowired
+	private AuctionBiderRepository BiRepo;
 	
 	// 경매 추가
 	@Override
@@ -142,12 +148,12 @@ public class AuctionServiceImpl implements AuctionService {
 
 	// 낙찰완료
 	@Override
-	public List<AuctionBiderDTO> AuctionBider(int userno) 
+	public List<AuctionBiderDTO> AuctionBider(String name) 
 			throws ServletException, IOException {
 		logger.info("<<< Serivce AuctionBider Start! >>>");
-		
-		
-		return dao.AuctionBider(userno);
+		List<AuctionBiderDTO> list = dao.AuctionBider(name);
+		System.out.println("리스트 : " + list);
+		return dao.AuctionBider(name);
 	}
 
 	// 경매 상세 - (진행페이지)
@@ -173,6 +179,7 @@ public class AuctionServiceImpl implements AuctionService {
         dto.setCham(ent.getCham());
         dto.setAddress(ent.getAddress());
         dto.setName(ent.getName());
+        dto.setHostname(ent.getHostname());
         
 		return dto;
 	}
@@ -219,7 +226,65 @@ public class AuctionServiceImpl implements AuctionService {
 		ent.setLastprice(dto.getLastprice());
 		ent.setName(dto.getName());
 		
-		return dao.AuctionPriceUpdate(ent);
-
+		int updateCnt = dao.AuctionPriceUpdate(ent);
+		return updateCnt;
+	}
+	
+	//경매중 중복 찾기
+	@Override
+	public int AuctionBidfind (Map<String, Object> map)
+			throws ServletException, IOException {
+		logger.info("<<< Serivce AuctionBidfind Start! >>>");
+		
+		int selectCnt = 0;
+		
+		selectCnt = dao.AuctionBidfind(map);
+		
+		return selectCnt;
+	}
+	
+	// 낙찰자 업데이트
+	@Override
+	public void AuctionBiderAdd (AuctionBiderDTO dto)
+			throws ServletException, IOException {
+		logger.info("<<< Serivce AuctionBiderAdd Start! >>>");
+		AuctionBidderEntity ent = new AuctionBidderEntity();
+		int a = dto.getAuctionno();
+		System.out.println("번호 테스트 : "+ a);
+		ent.setAuctionbidderno(dto.getAuctionbidderno());
+		ent.setAuctionno(dto.getAuctionno());
+		ent.setBidprice(dto.getBidprice());
+		ent.setName(dto.getName());
+		
+		dao.AuctionBiderAdd(ent);
+	}
+	
+	// 종료시간 설정
+	@Override
+	public void AuctionSetEndTime (AuctionDTO dto)
+			throws ServletException, IOException {
+		logger.info("<<< Serivce AuctionSetEndTime Start! >>>");
+		AuctionEntity ent = new AuctionEntity();
+		
+		ent.setAuctionno(dto.getAuctionno());
+		ent.setName(dto.getName());
+		
+		dao.AuctionSetEndTime(ent);
+		
+	}
+	
+	@Override
+	public AuctionDTO hostAndGuestChatInfo (int auctionno)
+			throws ServletException, IOException {
+		logger.info("<<< Serivce hostAndGuestChatInfo Start! >>>");
+		AuctionEntity ent = Repo.findByAuctionno(auctionno);
+		AuctionDTO dto = new AuctionDTO();
+		
+		dto.setAuctionno(auctionno);
+		dto.setName(ent.getName());
+		dto.setLastprice(ent.getLastprice());
+		dto.setAuctiontitle(ent.getAuctiontitle());
+		
+		return dto;
 	}
 }
