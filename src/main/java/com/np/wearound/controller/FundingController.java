@@ -15,8 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.np.wearound.dto.FundingDTO;
 import com.np.wearound.entities.Funding;
 import com.np.wearound.entities.FundingRewards;
+import com.np.wearound.entities.FundingView;
+import com.np.wearound.entities.FundingPledges;
 import com.np.wearound.service.FundingServiceImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -49,15 +54,32 @@ public class FundingController {
    private FundingServiceImpl service;
    
    
+//   // 전체 리스트 (main)
+//   @GetMapping("/funding")
+//   public String fundinglist(@RequestParam(name = "category", required = false) String category, Model model) {
+//	    logger.info("funding - fundinglist");
+//
+//	    if (category != null) {
+//	        List<Funding> selectedFundingList = service.SelectFundingList(category);
+//	        model.addAttribute("fundingList", selectedFundingList);
+//	    } else {
+//	        List<Funding> allFundingList = service.Fundinglist();
+//	        model.addAttribute("fundingList", allFundingList);
+//	    }
+//
+//	    return "funding";
+//   	}
+   
    // 전체 리스트 (main)
    @GetMapping("/funding")
    public List<Funding> fundinglist(){
 	   logger.info("funding - fundinglist");
-
-	   return service.fundinglist();
+			   
+	   
+	   return service.Fundinglist();
    }
    
-   
+   // 펀딩 상세 page
    @GetMapping("/fundingDetail")
    public Optional<Funding> fundingDetail(@RequestParam("fundingcode") int fundingcode) {
 	   logger.info("funding - detail");
@@ -65,7 +87,7 @@ public class FundingController {
 	   
 	   return service.FundingDetail(fundingcode);
    }
-
+   // 상세 page 속 rewards
    @GetMapping("/rewardsList")
    public List<FundingRewards> rewardslist(@RequestParam("fundingcode") int fundingcode) {
 	   logger.info("funding - rewardslist");
@@ -74,6 +96,52 @@ public class FundingController {
 	   return service.Rewardslist(fundingcode);
    }   
 
+   
+   // 후원하기 상세
+   @GetMapping("/fundingPledge")
+   public Optional<FundingView> fundingPledge(@RequestParam("rewardscode") int rewardscode, @RequestParam("fundingcode") int fundingcode){
+	   logger.info(" controller - fundingPledge ");
+	   
+	   
+	   return service.FundingInfo(fundingcode, rewardscode);
+   }
+   
+//   // 후원하기 진행 1
+//   @PostMapping("/contributeFunding")
+//   public String ContributeFunding(@RequestBody FundingPledges ent, @RequestParam("fundingcode") int fundingcode, @RequestParam("nowamount") int nowamount)
+//		   throws ServletException, IOException{
+//  		logger.info(" controller - ContributeFunding");
+//
+//  		System.out.println(ent);
+//  		service.ContributeFunding(ent);
+//  		service.UpdateNowAmount(fundingcode, nowamount);
+//  		return "fundingPledge";
+//   }
+   
+   // 후원하기 진행 1
+   @PostMapping("/contributeFunding")
+   public ResponseEntity<Object> ContributeFunding(@RequestBody Map<String, String> map)
+		   throws ServletException, IOException{
+  		logger.info(" controller - ContributeFunding");
+  		FundingPledges ent = new FundingPledges();
+  		int fundingcode = Integer.parseInt(map.get("fundingcode"));
+  		
+  		ent.setFundingcode(fundingcode);
+  		ent.setRewardscode(Integer.parseInt(map.get("rewardscode")));
+  		ent.setUserno(Integer.parseInt(map.get("userno")));
+  		ent.setQuantity(Integer.parseInt(map.get("quantity")));
+  		ent.setAddress(map.get("address"));
+  		
+  		int nowamount = Integer.parseInt(map.get("nowamount"));
+  		System.out.println(nowamount);
+  		
+  		System.out.println(ent);
+  		
+  		FundingPledges plg = service.ContributeFunding(ent);
+  		service.UpdateNowAmount(fundingcode, nowamount);
+  		return ResponseEntity.ok().build();
+   }
+   
    // fundingadd
    @PostMapping(value="/fundingAdd", consumes="multipart/form-data")
    public ResponseEntity<Funding> fundingAdd(
@@ -129,16 +197,12 @@ public class FundingController {
    }
 
    @PostMapping("/rewardAdd")
-   public String rewardAdd(@RequestBody
-		   FundingRewards ent
-		   )throws ServletException, IOException{
-	   		logger.info("funding - rewardAdd");
-	   		
-
-	   		
-	   		System.out.println("entity" + ent);
-	   		
-	   		service.RewardAdd(ent);
+   public String rewardAdd(@RequestBody FundingRewards ent)
+		   throws ServletException, IOException{
+   		logger.info("funding - rewardAdd");
+	
+		System.out.println("entity" + ent);
+		service.RewardAdd(ent);
 
 	   return "rewardAdd";
    }

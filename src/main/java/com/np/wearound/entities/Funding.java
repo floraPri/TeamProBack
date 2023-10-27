@@ -59,4 +59,8 @@ public class Funding {
 	private int nowamount; 
 	private int goalamount;
 	
+	
+	public void setNowAmount(int nowamount) {
+        this.nowamount = nowamount;
+    }
 }
