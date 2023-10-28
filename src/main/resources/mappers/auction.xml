@@ -67,4 +67,27 @@
 		WHERE AuctionBidder.userno =  #{userno}
 	</select>
 	
+	<insert id="AuctionStart" parameterType="com.np.wearound.auctionEntity.AuctionBidingEntity">
+		INSERT INTO auctionbiding(auctionbidderno, auctionno, name)
+		VALUES (auctionbiding_seq.nextval, 
+				#{auctionno}, 
+			    #{name}
+			   )
+	</insert>
+	
+	<update id="AuctionChamUpdate" parameterType="com.np.wearound.auctionEntity.AuctionEntity">
+		UPDATE Auction
+			SET
+			  cham = cham + 1
+			WHERE auctionno = #{auctionno}
+	</update>		
+	
+	<update id="AuctionPriceUpdate" parameterType="com.np.wearound.auctionEntity.AuctionEntity">
+		UPDATE Auction
+			SET
+			  lastprice = #{lastprice},
+			  name = #{name}
+			WHERE auctionno = #{auctionno}
+	</update>	
+	
 </mapper>

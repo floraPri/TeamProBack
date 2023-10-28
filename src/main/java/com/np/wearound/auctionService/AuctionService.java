@@ -9,6 +9,7 @@ import com.np.wearound.auctionDto.AuctionAddDTO;
 import com.np.wearound.auctionDto.AuctionBiderDTO;
 import com.np.wearound.auctionDto.AuctionBidingDTO;
 import com.np.wearound.auctionDto.AuctionDTO;
+import com.np.wearound.auctionDto.AuctionDetailDTO;
 import com.np.wearound.auctionDto.AuctionHostDTO;
 import com.np.wearound.auctionDto.AuctionListDTO;
 import com.np.wearound.auctionEntity.AuctionEntity;
@@ -34,5 +35,17 @@ public interface AuctionService {
 			throws ServletException, IOException;
 	
 	public List<AuctionBiderDTO> AuctionBider(int userno)
+			throws ServletException, IOException;
+	
+	public AuctionDetailDTO Auction (int auctionno)
+			throws ServletException, IOException;
+	
+	public int AuctionStart (AuctionBidingDTO dto)
+			throws ServletException, IOException;
+	
+	public int AuctionChamUpdate (AuctionBidingDTO dto)
+			throws ServletException, IOException;
+	
+	public int AuctionPriceUpdate (AuctionBidingDTO dto)
 			throws ServletException, IOException;
 }
