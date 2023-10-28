@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.np.wearound.dto.FundingDTO;
@@ -11,10 +12,12 @@ import com.np.wearound.entities.Funding;
 import com.np.wearound.entities.FundingPledges;
 import com.np.wearound.entities.FundingRewards;
 import com.np.wearound.entities.FundingView;
+import com.np.wearound.entities.PledgesView;
 import com.np.wearound.repository.FundingPledgesRepository;
 import com.np.wearound.repository.FundingRepository;
 import com.np.wearound.repository.FundingRewardsRepository;
 import com.np.wearound.repository.FundingViewRepository;
+import com.np.wearound.repository.PledgesViewRepository;
 import com.np.wearound.repository.UserRepository;
 
 @Service
@@ -35,12 +38,15 @@ public class FundingServiceImpl implements FundingService{
 	@Autowired
 	private FundingViewRepository view;
 	
+	@Autowired
+	private PledgesViewRepository pledgesView;
+	
 	@Override
 	public List<Funding> Fundinglist() {
 		System.out.println(" FundingService - fundinglist ");
 		
 				
-		return funding.findAll();
+		return funding.findAll(Sort.by("fundingcode").descending());
 	}
 	
 	@Override
@@ -63,7 +69,14 @@ public class FundingServiceImpl implements FundingService{
 		System.out.println(" service - Rewardslist");
 		System.out.println(fundingcode);
 		
-		return reward.findByFundingcode(fundingcode);
+		return reward.findByFundingcodeOrderByRewardscodeAsc(fundingcode);
+	}
+	
+	@Override
+	public Optional<FundingRewards> RewardsDetail(int rewardscode){
+		System.out.println("service - rewardsDetail");
+		
+		return reward.findById(rewardscode);
 	}
 	
 	@Override
@@ -81,43 +94,75 @@ public class FundingServiceImpl implements FundingService{
 		return newplg;
 	}
 	
+//	@Override
+//	public void UpdateNowAmount(int fundingcode, int nowamount) {
+//		Optional<Funding> findfunding = funding.findById(fundingcode);
+//
+//	    if (findfunding.isPresent()) {
+//	        Funding getAmount = findfunding.get();
+//	        // set
+//	        getAmount.setNowAmount(nowamount);
+//	        // update
+//	        funding.save(getAmount);
+//	    } else {
+//	        System.out.println("error");
+//	    }
+//	}
+	//test
 	@Override
 	public void UpdateNowAmount(int fundingcode, int nowamount) {
-		Optional<Funding> findfunding = funding.findById(fundingcode);
+	    Optional<Funding> findfunding = funding.findById(fundingcode);
 
 	    if (findfunding.isPresent()) {
-	        Funding existingFunding = findfunding.get();
+	        Funding getAmount = findfunding.get();
+	        
+	        // 기존의 nowAmount 값에 nowamount를 누적해서 더함
+	        int updatedAmount = getAmount.getNowamount() + nowamount;
+	        
 	        // set
-	        existingFunding.setNowAmount(nowamount);
+	        getAmount.setNowAmount(updatedAmount);
+	        
 	        // update
-	        funding.save(existingFunding);
+	        funding.save(getAmount);
 	    } else {
 	        System.out.println("error");
 	    }
 	}
 
 	@Override
-	public List<Funding> OrganizerList() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public List<Funding> MyOrganizeList(int userno) {
+		System.out.println("service - MyOrganizeList");
+		return funding.findByUserno(userno);
+	}			
 
 	@Override
-	public List<Funding> Participantlist() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<PledgesView> MyPledgedList(int userno) {
+		System.out.println("service - MyPledgedList");
+
+		return pledgesView.findByUsernoOrderByRegdateDesc(userno);
 	}
+	
+	
 
 	@Override
 	public Funding FundingAdd(Funding ent) {
 		System.out.println(" FundingService - FundingAdd ");
 		System.out.println("funding " + ent);
 		
-		Funding fund= funding.save(ent);
-		System.out.println("fund" + fund);
-		return fund;
+		Funding add = funding.save(ent);
+		System.out.println("fund" + add);
+		return add;
 	}
 
+	@Override
+	public Funding FundingEdit(Funding ent) {
+		System.out.println(" FundingService - FundingEdit ");
+		System.out.println(ent);
+		
+		Funding edit = funding.save(ent);
+		return edit;
+	}
+	
 	@Override
 	public void RewardAdd(FundingRewards ent) {
 		System.out.println(" FundingService - RewardAdd ");
@@ -125,6 +170,15 @@ public class FundingServiceImpl implements FundingService{
 		
 		reward.save(ent);
 	}
+	
+	@Override
+	public void RewardEdit(FundingRewards edit) {
+		System.out.println(" FundingService - rewardEdit ");
+		System.out.println(" reward " + edit );
+		
+		reward.save(edit);
+	}
+	
 
 
 

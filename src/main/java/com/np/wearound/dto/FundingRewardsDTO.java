@@ -29,10 +29,8 @@ public class FundingRewardsDTO {
 
 		private int rewardscode;
 		private int fundingcode;
-		private int userno;
 		private int price;
 		private String title;
-		private String subtitle;
 		private String content;
 		private Date delivery;
 		

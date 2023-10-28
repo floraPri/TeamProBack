@@ -49,10 +49,8 @@ public class FundingRewards {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GENERATOR")
 	private int rewardscode;
-	private int userno;
 	private int price;
 	private String title;
-	private String subtitle;
 	private String content;
 	private Date delivery;
 	

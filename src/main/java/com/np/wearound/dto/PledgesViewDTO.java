@@ -11,27 +11,31 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class FundingViewDTO {
+public class PledgesViewDTO {
 
-	private int userno; 
+//	p.pledgesnum, p.userno,	p.quantity, p.address, p.regdate
+	private int userno;
+	private int pledgesnum;
+	private int quantity;
+	private String address;
+	private Date regdate;
 	
+//	f.fundingcode, f.category, f.title, f.precontent, f.enddate, f.nowamount, f.goalamount,	
 	private int fundingcode; 
-	
 	private String category; 
 	private String title; 
-//	private String subtitle; 
 	private String image; 
-	private String content; 
 	private String precontent; 
-	private Date startdate; 
 	private Date enddate;
 	private int nowamount; 
 	private int goalamount;
 	
+//	r.rewardscode, r.price, r.title as rewardtitle, r.content as rewardcontent , r.delivery,
 	private int rewardscode;
-	
 	private int price;
 	private String rewardtitle;
 	private String rewardcontent;
 	private Date delivery;
+
+	
 }

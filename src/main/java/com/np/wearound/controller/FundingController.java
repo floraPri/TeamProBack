@@ -30,6 +30,7 @@ import com.np.wearound.dto.FundingDTO;
 import com.np.wearound.entities.Funding;
 import com.np.wearound.entities.FundingRewards;
 import com.np.wearound.entities.FundingView;
+import com.np.wearound.entities.PledgesView;
 import com.np.wearound.entities.FundingPledges;
 import com.np.wearound.service.FundingServiceImpl;
 
@@ -106,23 +107,11 @@ public class FundingController {
 	   return service.FundingInfo(fundingcode, rewardscode);
    }
    
-//   // 후원하기 진행 1
-//   @PostMapping("/contributeFunding")
-//   public String ContributeFunding(@RequestBody FundingPledges ent, @RequestParam("fundingcode") int fundingcode, @RequestParam("nowamount") int nowamount)
-//		   throws ServletException, IOException{
-//  		logger.info(" controller - ContributeFunding");
-//
-//  		System.out.println(ent);
-//  		service.ContributeFunding(ent);
-//  		service.UpdateNowAmount(fundingcode, nowamount);
-//  		return "fundingPledge";
-//   }
-   
-   // 후원하기 진행 1
+   // 후원하기 v
    @PostMapping("/contributeFunding")
-   public ResponseEntity<Object> ContributeFunding(@RequestBody Map<String, String> map)
+   public ResponseEntity<Object> contributeFunding(@RequestBody Map<String, String> map)
 		   throws ServletException, IOException{
-  		logger.info(" controller - ContributeFunding");
+  		logger.info(" controller - ContributeFunding ");
   		FundingPledges ent = new FundingPledges();
   		int fundingcode = Integer.parseInt(map.get("fundingcode"));
   		
@@ -142,14 +131,30 @@ public class FundingController {
   		return ResponseEntity.ok().build();
    }
    
+   @GetMapping("/myOrganizeList")
+   public List<Funding> myOrganizeList(@RequestParam("userno") int userno){
+	   logger.info(" controller - organizeList ");
+	   
+	   return service.MyOrganizeList(userno);
+   }
+   
+   
+   @GetMapping("/myPledges")
+   public List<PledgesView> myPledges(@RequestParam("userno") int userno){
+	   logger.info(" controller - myPledges ");
+	   
+	   return service.MyPledgedList(userno);
+   }
+   
+   
+ 
    // fundingadd
    @PostMapping(value="/fundingAdd", consumes="multipart/form-data")
    public ResponseEntity<Funding> fundingAdd(
 		   @RequestParam("category") String category,
 		   @RequestParam("title") String title,
-		   @RequestParam("subtitle") String subtitle,
 		   @RequestParam("image") MultipartFile image,
-		   @RequestParam("subcontent") String subcontent,
+		   @RequestParam("precontent") String precontent,
 		   @RequestParam("content") String content,
 		   @RequestParam("startdate") Date startdate,
 		   @RequestParam("enddate") Date enddate,
@@ -162,10 +167,8 @@ public class FundingController {
 	   Funding ent = new Funding();
 	   ent.setCategory(category);
 	   ent.setTitle(title);
-	   ent.setSubtitle(subtitle);
-//	   ent.setImage(image);
 	   ent.setContent(content);
-	   ent.setSubcontent(subcontent);
+	   ent.setPrecontent(precontent);
 	   ent.setStartdate(startdate);
 	   ent.setEnddate(enddate);
 	   ent.setGoalamount(goalamount);
@@ -191,9 +194,72 @@ public class FundingController {
 		
 		System.out.println("add "+ ent);
 		
-		Funding funding =  service.FundingAdd(ent);
+		Funding add =  service.FundingAdd(ent);
 	   
-	   return ResponseEntity.ok(funding);
+	   return ResponseEntity.ok(add);
+   }
+   // edit상세
+   @GetMapping("/fundingEdit")
+   public Optional<Funding> fundingEditDetail(@RequestParam("fundingcode") int fundingcode) {
+	   logger.info("controller - fundingEdit");
+	   
+	   return service.FundingDetail(fundingcode);
+   }
+   
+   
+   // update
+   @PostMapping(value="/fundingEdit", consumes="multipart/form-data")
+   public ResponseEntity<Funding> fundingEdit(
+		   @RequestParam("fundingcode") int fundingcode,
+		   @RequestParam("category") String category,
+		   @RequestParam("title") String title,
+		   @RequestParam("image") MultipartFile image,
+		   @RequestParam("precontent") String precontent,
+		   @RequestParam("content") String content,
+		   @RequestParam("startdate") Date startdate,
+		   @RequestParam("enddate") Date enddate,
+		   @RequestParam("nowamount") int nowamount,
+		   @RequestParam("goalamount") int goalamount,
+		   @RequestParam("userno") int userno,
+		   HttpServletRequest req
+		   ) throws ServletException, IOException {
+	   logger.info("funding - fundingEdit");
+	   
+	   Funding ent = new Funding();
+	   ent.setFundingcode(fundingcode);
+	   ent.setCategory(category);
+	   ent.setTitle(title);
+	   ent.setContent(content);
+	   ent.setPrecontent(precontent);
+	   ent.setStartdate(startdate);
+	   ent.setEnddate(enddate);
+	   ent.setNowAmount(nowamount);
+	   ent.setGoalamount(goalamount);
+	   ent.setUserno(userno);
+	   
+	   System.out.println("ett" + ent);
+	   
+	   String uploadDirectory = req.getSession().getServletContext().getRealPath("/images");
+	   //String uploadDirectory = "src/main/resources/images";
+	   if (!image.isEmpty()) {
+		   String fileName = image.getOriginalFilename();
+		   logger.info("fileName fullPath={}", fileName);
+		   // 저장할 파일 경로
+		   
+		   File uploadedFile = new File(fileName);
+		   
+		   String fullPath = uploadDirectory + File.separator + uploadedFile;
+		   image.transferTo(new File(fullPath));
+		   String filePath = "http://localhost:8081/images/"+uploadedFile+"/";
+		   
+		   ent.setImage(filePath);
+	   }
+	   
+	   System.out.println("add "+ ent);
+	   
+	   Funding edit =  service.FundingEdit(ent);
+	   
+	   return ResponseEntity.ok(edit);
    }
 
    @PostMapping("/rewardAdd")
@@ -207,12 +273,23 @@ public class FundingController {
 	   return "rewardAdd";
    }
    
+   // edit상세
+   @GetMapping("/rewardEdit")
+   public Optional<FundingRewards> rewardEditDetail(@RequestParam("rewardscode") int rewardscode, @RequestParam("fundingcode") int fundingcode) {
+	   logger.info("controller - rewardEditDetail");
+	   
+	   return service.RewardsDetail(rewardscode);
+   }
    
-//   @GetMapping("/fundingEdit")
-//   public FundingDTO fundingEdit(@RequestParam("fundingcode") int fundingcode)
-//   		throws ServletException, IOException{
-//	   
-//	   
-//	   return service.;
+   @PostMapping("/rewardEdit")
+   public String rewardEdit(@RequestBody FundingRewards edit)
+		   throws ServletException, IOException{
+	   logger.info("funding - rewardEdit");
+	   
+	   System.out.println("entity" + edit);
+	   service.RewardEdit(edit);
+	   
+	   return "rewardEdit";
+   }
 
 }
