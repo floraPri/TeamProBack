@@ -13,25 +13,20 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
 import com.np.wearound.auctionDto.AuctionAddDTO;
 import com.np.wearound.auctionDto.AuctionBiderDTO;
@@ -40,7 +35,6 @@ import com.np.wearound.auctionDto.AuctionDTO;
 import com.np.wearound.auctionDto.AuctionDetailDTO;
 import com.np.wearound.auctionDto.AuctionHostDTO;
 import com.np.wearound.auctionDto.AuctionListDTO;
-import com.np.wearound.auctionEntity.AuctionEntity;
 import com.np.wearound.auctionService.AuctionService;
 import lombok.RequiredArgsConstructor;
 
@@ -55,9 +49,6 @@ public class AuctionController {
 	@Autowired
 	private AuctionService service;
 	
-
-	private SimpMessagingTemplate messagingTemplate;
-    
 	// 경매 추가
 	@PostMapping(value="/auctionAdd", consumes="multipart/form-data")
 	public String auctionAdd(
@@ -201,10 +192,6 @@ public class AuctionController {
 		return service.AuctionBider(name);
 	}
 	
-	@Autowired
-    public AuctionController(SimpMessagingTemplate messagingTemplate) {
-        this.messagingTemplate = messagingTemplate;
-    }
 	
 	// 경매 상세페이지 (진행 페이지)
 	@MessageMapping("/send/bid/{auctionno}")
@@ -213,11 +200,7 @@ public class AuctionController {
 	public AuctionDetailDTO auctionDetail(@DestinationVariable int auctionno, @Payload AuctionDetailDTO message)
 			throws ServletException, IOException {
 		logger.info("<<< Controller auctionBider Start! >>>");
-		String topic = "/topic/bid/message/" + auctionno;
-		
-        // 여기에서 message를 처리
-        messagingTemplate.convertAndSend(topic, message);
-        System.out.println("메세지 수신: " + message);
+
 		return service.Auction(auctionno);
 	}
 	
