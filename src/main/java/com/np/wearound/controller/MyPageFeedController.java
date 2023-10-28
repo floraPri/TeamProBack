@@ -101,16 +101,7 @@ public class MyPageFeedController {
 		return "redirect:/myPage/myp";
 	}
 	
-	//피드 상세(select 1건)
-//	@RequestMapping("/feedEditPage/{feedcode}")
-//	public String editFeedPage(@PathVariable(name="feedcode") int feedcode,Model model) 
-//			throws ServletException, IOException {
-//		
-//		Feed feed = service.get(feedcode);
-//		model.addAttribute("feed",feed);
-//		return "feedEditPage";
-//	}
-	
+
 	//피드 상세(select 1건)
 	@GetMapping(value="/feedEditPage")
 	public Feed fetchFeedById(@RequestParam("feedcode") int feedcode) 
@@ -159,5 +150,14 @@ public class MyPageFeedController {
 		return "redirect:/myPage/myp";
 	} 
 	
-	
+	//마이 채널 페이지 피드목록
+	//내가 등록한 피드 목록
+	@GetMapping("/myChannel")
+	public List<Feed> myChannelfeedList(@RequestParam int userno) 
+			throws ServletException, IOException {
+		logger.info("<<< MyPageFeedController -  myChannelfeedList(마이채널 피드 목록)>>>");		
+		List<Feed> myFeedList = service.feedList(userno);
+		System.out.println("FeedController");
+		return myFeedList;
+	}
 }

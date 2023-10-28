@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.np.wearound.dto.FeedDTO;
+import com.np.wearound.entities.FeedComment;
+import com.np.wearound.repository.FeedCommentRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +23,9 @@ public class FeedPageServiceImpl implements FeedPageService {
 
 	@Autowired
 	private SqlSession sqlSession;
+	
+	@Autowired
+	private FeedCommentRepository commentDAO;
 	
 	//전체 피드 리스트 출력
 	@Override
@@ -41,6 +46,29 @@ public class FeedPageServiceImpl implements FeedPageService {
 		List<FeedDTO> feedListById = sqlSession.selectList("com.np.wearound.mappers.FeedMapper.feedListById",userid);
 		System.out.println(userid+"의 피드 데이터 전송성공");
 		return feedListById;
+	}
+
+	//피드게시물 별 피드댓글 리스트 출력
+	@Override
+	public List<FeedComment> commentList(int feedcode) {
+		System.out.println("FeedPageServiceImpl - commentList(댓글 리스트 출력)");
+		List<FeedComment> commentList = commentDAO.findAll();
+		return commentList;
+	}
+
+	//피드댓글 입력
+	@Override
+	public void insertComment(FeedComment feedComment) {
+		System.out.println("FeedPageServiceImpl - insertComment(댓글 등록)");
+		System.out.println(feedComment);
+		commentDAO.save(feedComment);
+	}
+
+	//피드댓글 삭제
+	@Override
+	public void deleteCommnet(int commentno) {
+		System.out.println("FeedPageServiceImpl - deleteCommnet(댓글 삭제)");
+		commentDAO.deleteById(commentno);
 	}
 
 }

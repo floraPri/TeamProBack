@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.ui.Model;
 
 import com.np.wearound.dto.FeedDTO;
+import com.np.wearound.entities.FeedComment;
 
 public interface FeedPageService {
 	//피드목록 출력
@@ -19,12 +20,18 @@ public interface FeedPageService {
 	public List<FeedDTO> feedListById(String userid)
 			throws ServletException, IOException;
 	
+	//피드 댓글목록 출력
+	public List<FeedComment> commentList(int feedcode);
+	
+	//피드 댓글입력
+	public void insertComment(FeedComment feedComment);
+	
+	//피드 댓글 삭제
+	public void deleteCommnet(int commentno);
 	
 	//좋아요처리
 	
-	//피드 댓글목록 출력
 	
-	//피드 댓글입력
 	
-	//피드 댓글 삭제
+
 }

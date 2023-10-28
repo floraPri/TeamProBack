@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.np.wearound.dto.FeedDTO;
+import com.np.wearound.entities.FeedComment;
 import com.np.wearound.service.FeedPageServiceImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -60,6 +61,21 @@ public class FeedController {
 		return feed;
 	}
 	
+	//피드 상세 1건 -> 고객들이 눌렀을때 피드 페이지로...
+	public FeedDTO feedDetail(int feedcode) 
+			throws ServletException, IOException {
+		logger.info("<<<< FeedController -  feedList(아이디별 등록피드리스트 출력)>>>>");
+		
+		return null;
+	}
 	
+	//피드 댓글목록 출력
+	public List<FeedComment> feedCommentList(@RequestParam int feedcode) 
+			throws ServletException, IOException {
+		logger.info("<<<< FeedController -  feedList(피드댓글 목록 출력)  >>>>");	
+		
+		
+		return null;
+	}
 	
 }
