@@ -36,7 +36,7 @@ public class SecurityConfig {
       .authorizeHttpRequests((requests) -> requests
           .antMatchers("/login", "/register","/logout").permitAll() // 인증이 필요하지 않은 유일한 엔드포인트,리액트의 url과 일치시켜야 함
           //.antMatchers("/**").permitAll()
-          .antMatchers("/auction/*","/myPage").hasAnyRole("USER")//user만 진입가능
+          .antMatchers("/auction/*","/myPage","/user/*").hasAnyRole("USER")//user만 진입가능
           .antMatchers("/admin/*").hasAnyRole("ADMIN")//admin만 진입가능
             .anyRequest().authenticated() // 나머지 엔드포인트는 인증을 받아야 함            
             );
