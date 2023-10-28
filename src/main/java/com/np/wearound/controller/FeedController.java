@@ -74,8 +74,7 @@ public class FeedController {
 			throws ServletException, IOException {
 		logger.info("<<<< FeedController -  feedList(피드댓글 목록 출력)  >>>>");	
 		
-		
-		return null;
+		return service.commentList(feedcode);
 	}
 	
 }
