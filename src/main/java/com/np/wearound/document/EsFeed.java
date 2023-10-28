@@ -16,25 +16,20 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "index_funding_tbl")
+@Document(indexName = "index_feed_tbl")
 @Builder
 @Data
-public class EsFunding {
+public class EsFeed {
 
    @Id
-   private int fundingcode; 
-   private String category; 
-   private String title; 
-   private String subtitle; 
-   private String image; 
-   private String content; 
-   private String subcontent; 
+   private int feedcode; 
+   private String feedtitle; 
+   private String feedcontent; 
+   private String feedimg; 
+   @Field(type = FieldType.Date, format = DateFormat.date_optional_time)
+   private Date feedregdate; 
    private int userno; 
-   @Field(type = FieldType.Date, format = DateFormat.date_optional_time)
-   private Date startdate; 
-   @Field(type = FieldType.Date, format = DateFormat.date_optional_time)
-   private Date enddate;
-   private int nowamount; 
-   private int goalamount;
+   private int comment_cnt;
+   private String show; 
    
 }
