@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+     
+<mapper namespace="com.np.wearound.mappers.BuyMapper">
+	
+	<!--구매목록 -->
+<<<<<<< HEAD
+	<select id="buyList" resultType="com.np.wearound.dto.BuyDTO">
+=======
+	<select id="buyList" parameterType="int" resultType="com.np.wearound.dto.BuyDTO">
+>>>>>>> 6e10ace5d5f72d7cb418782e816cc791a9c3fe76
+		<![CDATA[ 
+			SELECT b.product_buycode AS buycode
+				 , p.product_name AS product_name
+	        	 , p.product_code AS product_code
+	             , b.buyer AS buyer
+	        	 , b.amount AS amount
+	        	 , p.product_img AS product_img
+	        	 , b.product_price AS product_price
+	        	 , (b.amount * p.product_price) AS pay_price
+	             , b.buy_date AS buy_date
+	        	 , u.email AS product_buyer_id
+			 FROM buy_tbl b, user_tbl u,product_tbl p
+			WHERE b.product_code = p.product_code
+			  AND b.buyer = u.userno
+<<<<<<< HEAD
+=======
+			  AND u.userno = #{userno}
+>>>>>>> 6e10ace5d5f72d7cb418782e816cc791a9c3fe76
+		]]>
+	</select>
+	
+	
+</mapper>     
