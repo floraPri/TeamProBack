@@ -1,7 +1,14 @@
 package com.np.wearound.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.AggregationsContainer;
+import org.springframework.data.elasticsearch.core.ElasticsearchAggregations;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
@@ -10,7 +17,10 @@ import org.springframework.stereotype.Service;
 import com.np.wearound.document.EsAuction;
 import com.np.wearound.document.EsFeed;
 import com.np.wearound.document.EsFunding;
+import com.np.wearound.document.EsSearchRank;
 import com.np.wearound.document.EsUser;
+import com.np.wearound.dto.RankAgg;
+import com.np.wearound.entities.Search;
 import com.np.wearound.repository.EsAuctionRepository;
 import com.np.wearound.repository.EsUserRepository;
 
@@ -25,6 +35,10 @@ public class EsUserService {
     
     @Autowired
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
+    
+    public void searchByRank() {//수정중
+        
+    }
     
     public SearchHits<EsFunding> searchByFundingInfo (String search) {
     	System.out.println("<<< EsUserService - searchByFundingInfo() >>>");

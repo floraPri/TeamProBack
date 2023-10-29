@@ -1,7 +1,10 @@
 package com.np.wearound.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.elasticsearch.core.AggregationsContainer;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.np.wearound.document.EsAuction;
 import com.np.wearound.document.EsFeed;
 import com.np.wearound.document.EsFunding;
+import com.np.wearound.document.EsSearchRank;
 import com.np.wearound.document.EsUser;
+import com.np.wearound.dto.RankAgg;
 import com.np.wearound.dto.SearchDTO;
+import com.np.wearound.entities.Search;
 import com.np.wearound.service.EsUserService;
 import com.np.wearound.service.SearchService;
 
@@ -30,6 +36,11 @@ public class EsUserController {
 	
 	private final EsUserService esUserService;
 	private final SearchService searchService;
+	
+	//검색기록
+	@GetMapping("/searchrank")
+	public void searchrank () {//수정중
+	}
 	
 	//검색기록
 	@PostMapping("/searchhistory")

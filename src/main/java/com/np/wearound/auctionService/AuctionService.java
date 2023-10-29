@@ -2,6 +2,7 @@ package com.np.wearound.auctionService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 
@@ -12,6 +13,7 @@ import com.np.wearound.auctionDto.AuctionDTO;
 import com.np.wearound.auctionDto.AuctionDetailDTO;
 import com.np.wearound.auctionDto.AuctionHostDTO;
 import com.np.wearound.auctionDto.AuctionListDTO;
+import com.np.wearound.auctionEntity.AuctionBidingEntity;
 import com.np.wearound.auctionEntity.AuctionEntity;
 
 public interface AuctionService {
@@ -34,7 +36,7 @@ public interface AuctionService {
 	public List<AuctionBidingDTO> AuctionBiding(String name)
 			throws ServletException, IOException;
 	
-	public List<AuctionBiderDTO> AuctionBider(int userno)
+	public List<AuctionBiderDTO> AuctionBider(String name)
 			throws ServletException, IOException;
 	
 	public AuctionDetailDTO Auction (int auctionno)
@@ -47,5 +49,17 @@ public interface AuctionService {
 			throws ServletException, IOException;
 	
 	public int AuctionPriceUpdate (AuctionBidingDTO dto)
+			throws ServletException, IOException;
+	
+	public int AuctionBidfind (Map<String, Object> map)
+			throws ServletException, IOException;
+	
+	public void AuctionBiderAdd (AuctionBiderDTO dto)
+			throws ServletException, IOException;
+	
+	public void AuctionSetEndTime (AuctionDTO dto)
+			throws ServletException, IOException;
+	
+	public AuctionDTO hostAndGuestChatInfo (int auctionno)
 			throws ServletException, IOException;
 }

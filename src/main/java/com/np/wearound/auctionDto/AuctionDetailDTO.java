@@ -17,11 +17,12 @@ public class AuctionDetailDTO {
     private int cham;
     private String address;
     private String name;
+    private String hostname;
 
     public AuctionDetailDTO() {
     }
 
-    public AuctionDetailDTO(int auctionno, int userno, String auctiontitle, String image, String auctioncontent, int buynow, int startprice, int lastprice, int minbid, Date austarttime, Timestamp lasttime, int cham, String address, String name) {
+    public AuctionDetailDTO(int auctionno, int userno, String auctiontitle, String image, String auctioncontent, int buynow, int startprice, int lastprice, int minbid, Date austarttime, Timestamp lasttime, int cham, String address, String name, String hostname) {
         this.auctionno = auctionno;
         this.userno = userno;
         this.auctiontitle = auctiontitle;
@@ -36,6 +37,7 @@ public class AuctionDetailDTO {
         this.cham = cham;
         this.address = address;
         this.name = name;
+        this.hostname = hostname;
     }
 
     public int getAuctionno() {
@@ -148,6 +150,14 @@ public class AuctionDetailDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public String getHostname() {
+    	return hostname;
+    }
+    
+    public void setHostname(String hostname) {
+    	this.hostname = hostname;
     }
 }
 
