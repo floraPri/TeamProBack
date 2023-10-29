@@ -67,6 +67,7 @@
 		WHERE AuctionBidder.userno =  #{userno}
 	</select>
 	
+<<<<<<< HEAD
 	<insert id="AuctionStart" parameterType="com.np.wearound.auctionEntity.AuctionBidingEntity">
 		INSERT INTO auctionbiding(auctionbidderno, auctionno, name)
 		VALUES (auctionbiding_seq.nextval, 
@@ -90,4 +91,6 @@
 			WHERE auctionno = #{auctionno}
 	</update>	
 	
+=======
+>>>>>>> origin/branch_kmj2
 </mapper>

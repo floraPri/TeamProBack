@@ -21,7 +21,11 @@ import com.np.wearound.dto.BuyDTO;
 import com.np.wearound.service.MyPageServiceImpl;
 
 import lombok.RequiredArgsConstructor;
-
+/**
+ * 사용하지 않는 컨트롤러(작성자: 김명진)
+ * @author ict02-22
+ *
+ */
 
 @RestController
 @RequestMapping(value="/myPage")
@@ -34,7 +38,6 @@ public class MyPageController {
 	
 	//http://localhost:8081/myPage/myp/
 	//마이페이지 메인
-	
 	
 	
 	//구매목록 페이지

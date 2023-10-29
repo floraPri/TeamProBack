@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+     
+<mapper namespace="com.np.wearound.mappers.FeedMapper">
+	
+	<!--구매목록 -->
+	<select id="feedList" resultType="com.np.wearound.dto.FeedDTO">
+		<![CDATA[ 
+			SELECT f.feedcode   AS feedcode
+		        , u.email   AS userid
+		        , f.feedtitle   AS feedtitle
+		        , f.feedcontent     AS feedcontent
+		        , f.feedimg     AS feedimg
+		        , f.feedregdate     AS feedregdate
+		        , f.comment_cnt     AS comment_cnt
+			 FROM feed_tbl f, user_tbl u
+			WHERE f.userno = u.userno
+			ORDER BY f.feedregdate DESC
+		]]>
+	</select>
+	
+	<select id="feedListById" parameterType="String" resultType="com.np.wearound.dto.FeedDTO">
+		<![CDATA[ 
+		SELECT f.feedcode   AS feedcode
+	        , u.email   AS userid
+	        , f.feedtitle   AS feedtitle
+	        , f.feedcontent     AS feedcontent
+	        , f.feedimg     AS feedimg
+	        , f.feedregdate     AS feedregdate
+	        , f.comment_cnt     AS comment_cnt
+		FROM feed_tbl f, user_tbl u
+		WHERE f.userno = u.userno
+		AND u.email = #{userid}
+		ORDER BY f.feedregdate DESC
+		]]>
+	</select>
+	
+	
+</mapper>     
