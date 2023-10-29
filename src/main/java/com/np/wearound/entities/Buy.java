@@ -1,5 +1,7 @@
 package com.np.wearound.entities;
-
+/**
+ * 사용안함
+ */
 import java.sql.Date;
 
 import javax.persistence.Entity;
