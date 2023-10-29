@@ -36,18 +36,9 @@ public class FeedComment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="SEQ_GENERATOR")
     private int commentno;				
-    
-	@ManyToOne
-	@JoinColumn(name = "feedcode")
-	private Feed feed;
-	//private int feedcode;
-    
+	private int feedcode;
 	private String writer;
     private String comment_content;
-    
-    @ManyToOne
-    @JoinColumn(name = "userno")
-    private User user;
-    //private int userno;
+    private int userno;
     private Date regdate;
 }
