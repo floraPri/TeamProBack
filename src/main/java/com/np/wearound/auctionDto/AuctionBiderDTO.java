@@ -5,26 +5,24 @@ import java.sql.Timestamp;
 
 public class AuctionBiderDTO {
     private int auctionbidderno;
+    private String auctiontitle;
     private int auctionno;
-    private int userno;
+    private String name;
     private int bidprice;
     private Timestamp auendtime;
-    private String auctiontitle;
     private String image;
 
     public AuctionBiderDTO() {
     }
 
-    public AuctionBiderDTO(int auctionbidderno, int auctionno, int userno, int bidprice, Timestamp auendtime,
-			String auctiontitle, String image) {
+    public AuctionBiderDTO(int auctionbidderno, String auctiontitle, int auctionno, String name, int bidprice, Timestamp auendtime, String image) {
 		super();
 		this.auctionbidderno = auctionbidderno;
+		this.auctiontitle = auctiontitle;
 		this.auctionno = auctionno;
-		this.userno = userno;
+		this.name = name;
 		this.bidprice = bidprice;
 		this.auendtime = auendtime;
-		this.auctiontitle = auctiontitle;
-		this.image = image;
 	}
 
 	public int getAuctionbidderno() {
@@ -35,20 +33,30 @@ public class AuctionBiderDTO {
 		this.auctionbidderno = auctionbidderno;
 	}
 
+	
+	
+	public String getAuctiontitle() {
+		return auctiontitle;
+	}
+
+	public void setAuctiontitle(String auctiontitle) {
+		this.auctiontitle = auctiontitle;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public int getAuctionno() {
 		return auctionno;
 	}
 
 	public void setAuctionno(int auctionno) {
 		this.auctionno = auctionno;
-	}
-
-	public int getUserno() {
-		return userno;
-	}
-
-	public void setUserno(int userno) {
-		this.userno = userno;
 	}
 
 	public int getBidprice() {
@@ -67,14 +75,6 @@ public class AuctionBiderDTO {
 		this.auendtime = auendtime;
 	}
 
-	public String getAuctiontitle() {
-		return auctiontitle;
-	}
-
-	public void setAuctiontitle(String auctiontitle) {
-		this.auctiontitle = auctiontitle;
-	}
-
 	public String getImage() {
 		return image;
 	}
@@ -85,9 +85,8 @@ public class AuctionBiderDTO {
 
 	@Override
 	public String toString() {
-		return "AuctionBiderDTO [auctionbidderno=" + auctionbidderno + ", auctionno=" + auctionno + ", userno=" + userno
-				+ ", bidprice=" + bidprice + ", auendtime=" + auendtime + ", auctiontitle=" + auctiontitle + ", image="
-				+ image + "]";
+		return "AuctionBiderDTO [auctionbidderno=" + auctionbidderno + ", auctionno=" + auctionno + ", name=" + name
+				+ ", bidprice=" + bidprice + ", auendtime=" + auendtime + "]";
 	}
     
 }
