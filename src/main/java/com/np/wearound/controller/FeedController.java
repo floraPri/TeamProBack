@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,35 +47,39 @@ public class FeedController {
 		return feed_list;
 	}
 	
-	
-	//등록회원별 목록 페이지
-	@GetMapping("/feedListByIdPage")
-	public List<FeedDTO> feedListByUserid(@RequestParam String userid) 
-			throws ServletException, IOException {
-		logger.info("<<<< FeedController -  feedList(아이디별 등록피드리스트 출력)>>>>");
-		System.out.println("컨트롤러 - 피드목록 출력");
-		
-		List<FeedDTO> feed = service.feedListById(userid);
-		
-		System.out.println("컨트롤러 - 아이디별 피드데이터 전송성공");
-		System.out.println("컨트롤러 - feed"+feed);
-		return feed;
-	}
-	
-	//피드 상세 1건 -> 고객들이 눌렀을때 피드 페이지로...
-	public FeedDTO feedDetail(int feedcode) 
-			throws ServletException, IOException {
-		logger.info("<<<< FeedController -  feedList(아이디별 등록피드리스트 출력)>>>>");
-		
-		return null;
-	}
-	
 	//피드 댓글목록 출력
+	@GetMapping("/commentList")
 	public List<FeedComment> feedCommentList(@RequestParam int feedcode) 
 			throws ServletException, IOException {
 		logger.info("<<<< FeedController -  feedList(피드댓글 목록 출력)  >>>>");	
-		
-		return service.commentList(feedcode);
+		List<FeedComment> comment_list = service.commentList(feedcode);
+		System.out.println("댓글목록");
+		return comment_list;
 	}
+	
+	
+//	//등록회원별 목록 페이지
+//	@GetMapping("/feedListByIdPage")
+//	public List<FeedDTO> feedListByUserid(@RequestParam String userid) 
+//			throws ServletException, IOException {
+//		logger.info("<<<< FeedController -  feedList(아이디별 등록피드리스트 출력)>>>>");
+//		System.out.println("컨트롤러 - 피드목록 출력");
+//		
+//		List<FeedDTO> feed = service.feedListById(userid);
+//		
+//		System.out.println("컨트롤러 - 아이디별 피드데이터 전송성공");
+//		System.out.println("컨트롤러 - feed"+feed);
+//		return feed;
+//	}
+//	
+//	//피드 상세 1건 -> 고객들이 눌렀을때 피드 페이지로...
+//	public FeedDTO feedDetail(int feedcode) 
+//			throws ServletException, IOException {
+//		logger.info("<<<< FeedController -  feedList(아이디별 등록피드리스트 출력)>>>>");
+//		
+//		return null;
+//	}
+	
+
 	
 }
