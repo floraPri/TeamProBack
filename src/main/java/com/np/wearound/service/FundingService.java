@@ -13,7 +13,7 @@ import com.np.wearound.entities.PledgesView;
 public interface FundingService {
 	
 	// list
-	public List<Funding> Fundinglist();
+	public List<Funding> FundingList();
 	public List<Funding> SelectFundingList(String category);
 	
 	// detail

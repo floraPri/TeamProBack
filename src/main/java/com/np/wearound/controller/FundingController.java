@@ -43,33 +43,11 @@ public class FundingController {
    
    private static final Logger logger = LoggerFactory.getLogger(FundingController.class);
    
-//	집
-//	private final String uploadDirectory = "C:\\Users\\FloraPrincess\\Desktop\\DeV\\TeamProImage";
-//	
-//	학원
-//	private final String uploadDirectory = "C:\\Users\\ICT02-14\\Desktop\\Dev01\\TeamProImage";
-	
-//   private final String uploadDirectory = "C:\\Dev01\\TeamProImage";
+
 	
    @Autowired
    private FundingServiceImpl service;
    
-   
-//   // 전체 리스트 (main)
-//   @GetMapping("/funding")
-//   public String fundinglist(@RequestParam(name = "category", required = false) String category, Model model) {
-//	    logger.info("funding - fundinglist");
-//
-//	    if (category != null) {
-//	        List<Funding> selectedFundingList = service.SelectFundingList(category);
-//	        model.addAttribute("fundingList", selectedFundingList);
-//	    } else {
-//	        List<Funding> allFundingList = service.Fundinglist();
-//	        model.addAttribute("fundingList", allFundingList);
-//	    }
-//
-//	    return "funding";
-//   	}
    
    // 전체 리스트 (main)
    @GetMapping("/funding")
@@ -77,7 +55,7 @@ public class FundingController {
 	   logger.info("funding - fundinglist");
 			   
 	   
-	   return service.Fundinglist();
+	   return service.FundingList();
    }
    
    // 펀딩 상세 page
@@ -107,7 +85,7 @@ public class FundingController {
 	   return service.FundingInfo(fundingcode, rewardscode);
    }
    
-   // 후원하기 v
+   // 후원하기 insert
    @PostMapping("/contributeFunding")
    public ResponseEntity<Object> contributeFunding(@RequestBody Map<String, String> map)
 		   throws ServletException, IOException{
@@ -177,7 +155,6 @@ public class FundingController {
 	   System.out.println("ett" + ent);
 	   
 	   String uploadDirectory = req.getSession().getServletContext().getRealPath("/images");
-		//String uploadDirectory = "src/main/resources/images";
 		if (!image.isEmpty()) {
 			String fileName = image.getOriginalFilename();
 			logger.info("fileName fullPath={}", fileName);
@@ -240,7 +217,6 @@ public class FundingController {
 	   System.out.println("ett" + ent);
 	   
 	   String uploadDirectory = req.getSession().getServletContext().getRealPath("/images");
-	   //String uploadDirectory = "src/main/resources/images";
 	   if (!image.isEmpty()) {
 		   String fileName = image.getOriginalFilename();
 		   logger.info("fileName fullPath={}", fileName);
@@ -291,5 +267,6 @@ public class FundingController {
 	   
 	   return "rewardEdit";
    }
+   
 
 }
