@@ -1,15 +1,15 @@
 package com.np.wearound.service;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import com.np.wearound.dto.FeedDTO;
 import com.np.wearound.entities.FeedComment;
@@ -35,6 +35,20 @@ public class FeedPageServiceImpl implements FeedPageService {
 		
 		List<FeedDTO> feedList = sqlSession.selectList("com.np.wearound.mappers.FeedMapper.feedList");
 		System.out.println("피드 데이터 전송성공");
+		return feedList;
+	}
+	
+	//무한스크롤 피드 리스트 출력
+	public List<FeedDTO> feedListScroll(int page) 
+			throws ServletException, IOException {
+		System.out.println("FeedPageServiceImpl feedListScroll");
+		int start = ((page * 5)+1);
+		int end = ((page * 5)+5);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("start", start);
+		map.put("end", end);
+		System.out.println("start---" + start + "end---" + end);
+		List<FeedDTO> feedList = sqlSession.selectList("com.np.wearound.mappers.FeedMapper.feedListScroll",map);
 		return feedList;
 	}
 

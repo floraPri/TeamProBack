@@ -47,6 +47,18 @@ public class FeedController {
 		return feed_list;
 	}
 	
+	//피드목록 페이지 무한스크롤
+	@GetMapping("/feedPageScroll")
+	public List<FeedDTO> feedListScroll(@RequestParam int page) 
+			throws ServletException, IOException{
+		logger.info("<<<< FeedController -  feedListScroll(피드목록 출력)>>>>");
+		System.out.println("page: " + page);
+		
+		List<FeedDTO> feed_list = service.feedListScroll(page);
+		System.out.println("feed_list : " + feed_list);
+		return feed_list;
+	}
+	
 	//피드 댓글목록 출력
 	@GetMapping("/commentList")
 	public List<FeedComment> feedCommentList(@RequestParam int feedcode) 

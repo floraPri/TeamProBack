@@ -21,6 +21,26 @@
 		]]>
 	</select>
 	
+	<!--무한스크롤 페이징 -->
+	<select id="feedListScroll" parameterType="Map" resultType="com.np.wearound.dto.FeedDTO">
+		<![CDATA[ 
+			SELECT * 
+			FROM (
+			    SELECT f.feedcode AS feedcode,
+			           u.email AS userid,
+			           f.feedtitle AS feedtitle,
+			           f.feedcontent AS feedcontent,
+			           f.feedimg AS feedimg,
+			           f.feedregdate AS feedregdate,
+			           f.comment_cnt AS comment_cnt,
+			           ROW_NUMBER() OVER (ORDER BY f.feedregdate DESC) AS rnum
+			    FROM feed_tbl f
+			    JOIN user_tbl u ON f.userno = u.userno
+			) 
+			WHERE rnum BETWEEN #{start} AND #{end}
+		]]>
+	</select>
+	
 	<select id="feedListById" parameterType="String" resultType="com.np.wearound.dto.FeedDTO">
 		<![CDATA[ 
 		SELECT f.feedcode   AS feedcode
