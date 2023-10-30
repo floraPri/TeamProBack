@@ -11,6 +11,8 @@ import com.np.wearound.auctionDto.MessageDTO;
 @Controller
 public class WebSocketController {
 
+    // 프론트의 stompClient send 설정과 맞아야함 SendTosms 프론트 토픽 설정과 맞아야함
+    // @DestinationVariable 은 auctionno을 추출하기 위해 사용함
     @MessageMapping("/send/message/{auctionno}")
     @SendTo("/topic/receive/message/{auctionno}")
     public MessageDTO handleReceivedMessage(@DestinationVariable String auctionno, @Payload MessageDTO message) {
