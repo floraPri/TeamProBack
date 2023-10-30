@@ -121,14 +121,11 @@ public class AuctionServiceImpl implements AuctionService {
             dto.setCham(entity.getCham());
             list.add(dto);
 		}
-//		List<AuctionListDTO> list = Repo.findAll();
 		return list;
 	}
 	
-	// 경매 비활성
 	
-	
-	// 경매 수정
+	// 경매 HOST
 	@Override
 	public List<AuctionHostDTO> AuctionHost(int userno) 
 			throws ServletException, IOException {
@@ -273,6 +270,7 @@ public class AuctionServiceImpl implements AuctionService {
 		
 	}
 	
+	// 경매 1대1 채팅 정보
 	@Override
 	public AuctionDTO hostAndGuestChatInfo (int auctionno)
 			throws ServletException, IOException {
@@ -286,5 +284,18 @@ public class AuctionServiceImpl implements AuctionService {
 		dto.setAuctiontitle(ent.getAuctiontitle());
 		
 		return dto;
+	}
+	
+	// 경매 상세 - 낙찰자 중복 체크
+	@Override
+	public int AuctionbiderCheck (Map<String, Object> map)
+			throws ServletException, IOException {
+		logger.info("<<< Serivce AuctionbiderCheck Start! >>>");
+		
+		int selectCnt = 0;
+		
+		selectCnt = dao.AuctionbiderCheck(map);
+				
+		return selectCnt;
 	}
 }
