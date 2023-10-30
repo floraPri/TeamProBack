@@ -69,19 +69,25 @@ public class AuctionController {
 
 		String uploadDirectory = req.getSession().getServletContext().getRealPath("/images");
 		//String uploadDirectory = "src/main/resources/images";
+		
+		// 멀티파트파일로 넘어온 파일이 있을 경우 실행
 		if (!image.isEmpty()) {
+			// 올라온 파일 이름을 파일 이름으로 지정
 			String fileName = image.getOriginalFilename();
 			logger.info("fileName fullPath={}", fileName);
 			// 저장할 파일 경로
 			
+			// 업로드할 파일의 객체 생성
 			File uploadedFile = new File(fileName);
-
-			String fullPath = uploadDirectory + File.separator + uploadedFile;
-			image.transferTo(new File(fullPath));
-			String filePath = "http://localhost:8081/images/"+uploadedFile+"/";
-			System.out.println(filePath);
-			dto.setImage(filePath);
 			
+			// 파일 경로와 파일 이름 합쳐서 String 생성
+			String fullPath = uploadDirectory + File.separator + uploadedFile;
+			// 저장
+			image.transferTo(new File(fullPath));
+			// 웹 주소로 이미지를 불러올 수 있게 데이터 가공
+			String filePath = "http://localhost:8081/images/"+uploadedFile+"/";
+			// DTO에 set
+			dto.setImage(filePath);
 			}
 		
 		dto.setUserno(userno);
@@ -238,22 +244,32 @@ public class AuctionController {
 		return "auctionStart";
 	}
 	
+	// 낙찰자 추가
 	@PostMapping(value = "auctionBiderAdd")
 	public String auctionBiderAdd(@RequestBody Map<String, Object> data) 
 	        throws ServletException, IOException, ParseException {
 	    logger.info("<<< Controller auctionBiderAdd Start! >>>");
+	    // 받은 데이터를 DB에 알맞은 타입으로 가공
 	    int auctionno = Integer.parseInt(String.valueOf(data.get("auctionno")));
 	    System.out.println("auctionno : " + auctionno);
 	    String name = (String) data.get("name");
 	    int bidprice = Integer.parseInt(String.valueOf(data.get("bidprice")));
 	    
-	    if (auctionno != 0) {
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("auctionno", auctionno);
+	    map.put("name", name);
+	    
+	    int SelectCnt = 0;
+	    SelectCnt = service.AuctionbiderCheck(map);
+	    
+	    // 유효성 검사 - bider 가 있는지 확인하고 있으면 생략하고 즉시 리턴
+	    if (SelectCnt != 0) {
 	    	System.err.println("낙찰자 시스템 시작");
 		    String auendtimeStr = (String) data.get("auendtime");
 		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		    Date parsedDate = dateFormat.parse(auendtimeStr);
 		    Timestamp auendtime = new Timestamp(parsedDate.getTime());
-		    
+
 		    AuctionBiderDTO dto = new AuctionBiderDTO();
 		    dto.setAuctionbidderno(auctionno);
 		    dto.setAuctionno(auctionno);
@@ -272,7 +288,7 @@ public class AuctionController {
 		    
 		    return "auctionBiderAdd";
 	    } else {
-	    	System.err.println("낙찰자 시스템 오류!");
+	    	System.err.println("낙찰자 Exception 시스템!!");
 	    	return "auctionBiderAdd";
 	    }
 	}
@@ -282,6 +298,7 @@ public class AuctionController {
 			throws ServletException, IOException {
 		logger.info("<<< Controller hostAndGuestChatInfo Start! >>>");
 
+		// 1대1 채팅 정보 가져오기
 		return service.hostAndGuestChatInfo(auctionno);
 	}
 

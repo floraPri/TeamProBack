@@ -115,4 +115,11 @@
 			WHERE auctionno = #{auctionno}		
 	</update>
 	
+	<select id="AuctionbiderCheck" parameterType="com.np.wearound.auctionEntity.AuctionBidderEntity" resultType="int">
+		SELECT COUNT(*)
+		 FROM auctionbidder
+		 WHERE auctionno = #{auctionno}
+		   AND name = #{name}		
+	</select>
+	
 </mapper>
