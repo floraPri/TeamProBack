@@ -42,8 +42,8 @@ public class FundingServiceImpl implements FundingService{
 	private PledgesViewRepository pledgesView;
 	
 	@Override
-	public List<Funding> Fundinglist() {
-		System.out.println(" FundingService - fundinglist ");
+	public List<Funding> FundingList() {
+		System.out.println(" FundingService - fundingList ");
 		
 				
 		return funding.findAll(Sort.by("fundingcode").descending());
