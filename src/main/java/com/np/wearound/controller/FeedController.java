@@ -2,6 +2,7 @@ package com.np.wearound.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,17 +62,8 @@ public class FeedController {
 		return feed_list;
 	}
 	
-	//피드 댓글목록 출력
-	@GetMapping("/commentList")
-	public List<FeedComment> feedCommentList(@RequestParam int feedcode) 
-			throws ServletException, IOException {
-		logger.info("<<<< FeedController -  feedList(피드댓글 목록 출력)  >>>>");	
-		List<FeedComment> comment_list = service.commentList(feedcode);
-		System.out.println("댓글목록");
-		return comment_list;
-	}
 	
-	
+
 	//등록회원별 목록 페이지
 	@GetMapping("/feedListByIdPage")
 	public List<FeedDTO> feedListByUserid(@RequestParam String userid) 
@@ -84,14 +78,36 @@ public class FeedController {
 		return feed;
 	}
 	
-//	//피드 상세 1건 -> 고객들이 눌렀을때 피드 페이지로...
-//	public FeedDTO feedDetail(int feedcode) 
-//			throws ServletException, IOException {
-//		logger.info("<<<< FeedController -  feedList(아이디별 등록피드리스트 출력)>>>>");
-//		
-//		return null;
-//	}
-	
+	//피드 댓글 목록 출력
+	@GetMapping("/commentList")
+	public List<FeedComment> feedCommentList(@RequestParam int feedcode) 
+			throws ServletException, IOException {
+		logger.info("<<<< FeedController -  feedList(피드댓글 목록 출력)  >>>>");	
+		List<FeedComment> comment_list = service.commentList(feedcode);
+		return comment_list;
+	}
 
-	
+//	@RequestParam("feedcode") int feedcode,
+//	@RequestParam("writer") String writer,
+//	@RequestParam("comment_content") String comment_content,
+//	@RequestParam("userno") int userno
+	//피드 댓글 입력
+	@PostMapping("/commentAdd")
+	public String commentAdd(@RequestBody Map<String,String> map)
+		throws ServletException, IOException {
+		logger.info("<<<< FeedController -  commentAdd(피드댓글 목록 출력)  >>>>");
+		
+		FeedComment fcmt = new FeedComment();
+		
+		fcmt.setComment_content(map.get("comment_content"));
+		fcmt.setWriter(map.get("writer"));
+		fcmt.setUserno(Integer.parseInt(map.get("userno")));
+		fcmt.setFeedcode(Integer.parseInt(map.get("feedcode")));
+		
+		System.out.println(fcmt);
+		service.insertComment(fcmt);
+		
+		return "feedPage";
+	}
+		
 }
