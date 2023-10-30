@@ -21,6 +21,7 @@ public class FeedDTO {
 	private String feedimg;         	//VARCHAR2(100) NOT NULL,
 	private Timestamp feedregdate;		//TIMESTAMP DEFAULT sysdate,
 	private int userno;          		//NUMBER(10),               ---- 작성자 userno
+	private String username;				// 닉네임
 	private int comment_cnt;     		//   NUMBER(10) DEFAULT 0,
 	private String show;            	//  CHAR(3) DEFAULT 'Y' NOT NULL,
 	private String userid;				// 유저 아이디

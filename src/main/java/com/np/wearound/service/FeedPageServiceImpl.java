@@ -52,7 +52,8 @@ public class FeedPageServiceImpl implements FeedPageService {
 	@Override
 	public List<FeedComment> commentList(int feedcode) {
 		System.out.println("FeedPageServiceImpl - commentList(댓글 리스트 출력)");
-		List<FeedComment> commentList = commentDAO.findAllByFeedcode(feedcode);
+		//List<FeedComment> commentList = commentDAO.findAllByFeedcode(feedcode);
+		List<FeedComment> commentList = commentDAO.findAllByFeedcodeOrderByRegdateDesc(feedcode);
 		return commentList;
 	}
 

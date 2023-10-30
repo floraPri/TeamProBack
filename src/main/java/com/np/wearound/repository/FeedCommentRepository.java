@@ -8,4 +8,6 @@ import com.np.wearound.entities.FeedComment;
 
 public interface FeedCommentRepository extends JpaRepository<FeedComment,Integer> {
 	List<FeedComment> findAllByFeedcode(int feedcode);
+	
+	List<FeedComment> findAllByFeedcodeOrderByRegdateDesc(int feedcode);
 }
