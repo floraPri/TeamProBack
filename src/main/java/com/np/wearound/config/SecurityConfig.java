@@ -34,7 +34,7 @@ public class SecurityConfig {
       .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // stateless 애플리케이션을 스프링에게 전달하면 스프링에서 세션과 쿠키를 생성하지 않음
       .and()
       .authorizeHttpRequests((requests) -> requests
-          .antMatchers("/login", "/register","/logout","/search/*","/images/**","/weather/**","/ws/**", "/auction/auctionDetail/**", "/admin/addCs/**","/feed/**").permitAll() // 인증이 필요하지 않은 유일한 엔드포인트,리액트의 url과 일치시켜야 함
+          .antMatchers("/login", "/register","/logout","/search/*","/images/**","/weather/**","/ws/**", "/auction/auctionDetail/**", "/admin/addCs/**","/feed/**","/news/*","/socket.io/**").permitAll() // 인증이 필요하지 않은 유일한 엔드포인트,리액트의 url과 일치시켜야 함
           //.antMatchers("/**").permitAll()
           .antMatchers("/auction/*","/myPage","/user/*","/funding/*").hasAnyRole("USER")//user만 진입가능
           .antMatchers("/admin/*").hasAnyRole("ADMIN")//admin만 진입가능

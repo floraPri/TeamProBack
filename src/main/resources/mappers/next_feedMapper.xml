@@ -11,6 +11,7 @@
 			SELECT f.feedcode   AS feedcode
 		        , u.email   AS userid
 		        , f.feedtitle   AS feedtitle
+		        , u.name   AS username
 		        , f.feedcontent     AS feedcontent
 		        , f.feedimg     AS feedimg
 		        , f.feedregdate     AS feedregdate
@@ -48,6 +49,7 @@
 	        , f.feedtitle   AS feedtitle
 	        , f.feedcontent     AS feedcontent
 	        , f.feedimg     AS feedimg
+	        , u.name     AS username
 	        , f.feedregdate     AS feedregdate
 	        , f.comment_cnt     AS comment_cnt
 		FROM feed_tbl f, user_tbl u
