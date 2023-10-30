@@ -26,7 +26,8 @@
 			  auctioncontent = #{auctioncontent},
 			  buynow = #{buynow},
 			  startprice = #{startprice},
-			  minbid = #{minbid}
+			  minbid = #{minbid},
+			  image = #{image}
 			WHERE auctionno = #{auctionno}
 	</update>
 	
