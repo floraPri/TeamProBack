@@ -41,7 +41,6 @@ public class EsUserService {
     }
     
     public SearchHits<EsFunding> searchByFundingInfo (String search) {
-    	System.out.println("<<< EsUserService - searchByFundingInfo() >>>");
     	return elasticsearchRestTemplate.search(
 	        new NativeSearchQueryBuilder()
 	            .withQuery(QueryBuilders.multiMatchQuery(search, "title", "subcontent","category"))
@@ -51,7 +50,6 @@ public class EsUserService {
     }
     
     public SearchHits<EsAuction> searchByAuctionInfo(String search) {
-    	System.out.println("<<< EsUserService - searchByAuctionInfo() >>>");
     	return elasticsearchRestTemplate.search(
 	        new NativeSearchQueryBuilder()
 	            .withQuery(QueryBuilders.multiMatchQuery(search, "auctiontitle", "auctioncontent"))
@@ -61,7 +59,6 @@ public class EsUserService {
     }
     
     public SearchHits<EsFeed> searchByFeedInfo(String search) {
-    	System.out.println("<<< EsUserService - searchByFeedInfo() >>>");
     	return elasticsearchRestTemplate.search(
 	        new NativeSearchQueryBuilder()
 	            .withQuery(QueryBuilders.multiMatchQuery(search, "feedtitle", "feedcontent"))

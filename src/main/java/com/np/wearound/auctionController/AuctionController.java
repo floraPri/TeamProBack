@@ -263,7 +263,7 @@ public class AuctionController {
 	    SelectCnt = service.AuctionbiderCheck(map);
 	    
 	    // 유효성 검사 - bider 가 있는지 확인하고 있으면 생략하고 즉시 리턴
-	    if (SelectCnt != 0) {
+	    if (SelectCnt == 0) {
 	    	System.err.println("낙찰자 시스템 시작");
 		    String auendtimeStr = (String) data.get("auendtime");
 		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");

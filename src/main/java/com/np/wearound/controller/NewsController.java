@@ -36,7 +36,7 @@ public class NewsController {
    }
    
    @GetMapping("/news_")
-   public List<News> getLatestNews(@RequestParam(required = false, defaultValue = "10") int limit) {
+   public List<News> getLatestNews(@RequestParam(required = false, defaultValue = "5") int limit) {
        return service.getLatestNews(limit).getContent();
    }
 	   
