@@ -28,32 +28,26 @@ public class JwtAuthFilter extends OncePerRequestFilter {
    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
          throws ServletException, IOException {
 
-
-      System.out.println("=== JwtAuthFilter - doFilterInternal ===");
-      
       String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-      System.out.println("header : " + header);
       
       if(header != null) {
          String[] elements = header.split(" ");
          for(int i =0;i<elements.length;i++) {
          }
          if(elements.length == 2 && "Bearer".equals(elements[0])){
-        	 if (tokenBlacklistService.isTokenBlacklisted(elements[1])) {//블랙리스트에 있는지 여부 확인
-                  System.out.println("--- JwtAuthFilter 블랙리스트에 존재하는 토큰이므로 요청 거절 ---");
+        	 if (tokenBlacklistService.isTokenBlacklisted(elements[1])) {
                  response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                  return;
              }
             try {
                SecurityContextHolder.getContext().setAuthentication(userAuthProvider.validateToken(elements[1]));
             } catch(RuntimeException e) {
-               SecurityContextHolder.clearContext(); // 문제가 발생하면 보안 컨텍스트를 지우고 오류를 발생시킨다.
+               SecurityContextHolder.clearContext(); 
                throw e;
             }
          }
       }
-      System.out.println("--- JwtAuthFilter 정상 통과 ---");
-      filterChain.doFilter(request, response); // 필터 끝에서 doFilter() 메서드 호출
+      filterChain.doFilter(request, response);
    }
    
 }
