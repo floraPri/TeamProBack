@@ -32,6 +32,7 @@
 			           f.feedtitle AS feedtitle,
 			           f.feedcontent AS feedcontent,
 			           f.feedimg AS feedimg,
+			           u.name   AS username,
 			           f.feedregdate AS feedregdate,
 			           f.comment_cnt AS comment_cnt,
 			           ROW_NUMBER() OVER (ORDER BY f.feedregdate DESC) AS rnum

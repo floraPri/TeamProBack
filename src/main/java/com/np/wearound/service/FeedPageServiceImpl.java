@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.np.wearound.dto.FeedDTO;
 import com.np.wearound.entities.FeedComment;
+import com.np.wearound.entities.Like;
 import com.np.wearound.repository.FeedCommentRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -84,6 +85,30 @@ public class FeedPageServiceImpl implements FeedPageService {
 	public void deleteCommnet(int commentno) {
 		System.out.println("FeedPageServiceImpl - deleteCommnet(댓글 삭제)");
 		commentDAO.deleteById(commentno);
+	}
+
+	//좋아요 체크
+	@Override
+	public void insertLike(Like like)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	//좋아요 체크 여부
+	@Override
+	public int likeByUserChk(Map<String, Object> map)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	//좋아요 체크해제
+	@Override
+	public void deleteLike()
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

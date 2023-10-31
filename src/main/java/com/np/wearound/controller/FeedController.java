@@ -87,10 +87,7 @@ public class FeedController {
 		return comment_list;
 	}
 
-//	@RequestParam("feedcode") int feedcode,
-//	@RequestParam("writer") String writer,
-//	@RequestParam("comment_content") String comment_content,
-//	@RequestParam("userno") int userno
+
 	//피드 댓글 입력
 	@PostMapping("/commentAdd")
 	public String commentAdd(@RequestBody Map<String,String> map)
@@ -109,5 +106,16 @@ public class FeedController {
 		
 		return "feedPage";
 	}
+	
+	
+	//좋아요 선택(insert)
+	public String likeAdd(@RequestParam int useno) 
+			throws ServletException, IOException {
+			
+			return "";
+	}	
+	
+	
+	//좋아요 취소(delete)
 		
 }
