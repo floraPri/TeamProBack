@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 
@@ -13,8 +14,9 @@ import org.springframework.stereotype.Service;
 
 import com.np.wearound.dto.FeedDTO;
 import com.np.wearound.entities.FeedComment;
-import com.np.wearound.entities.Like;
+import com.np.wearound.entities.Good;
 import com.np.wearound.repository.FeedCommentRepository;
+import com.np.wearound.repository.GoodRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +29,9 @@ public class FeedPageServiceImpl implements FeedPageService {
 	
 	@Autowired
 	private FeedCommentRepository commentDAO;
+	
+	@Autowired
+	private GoodRepository goodDAO;
 	
 	//전체 피드 리스트 출력
 	@Override
@@ -67,7 +72,6 @@ public class FeedPageServiceImpl implements FeedPageService {
 	@Override
 	public List<FeedComment> commentList(int feedcode) {
 		System.out.println("FeedPageServiceImpl - commentList(댓글 리스트 출력)");
-		//List<FeedComment> commentList = commentDAO.findAllByFeedcode(feedcode);
 		List<FeedComment> commentList = commentDAO.findAllByFeedcodeOrderByRegdateDesc(feedcode);
 		return commentList;
 	}
@@ -76,7 +80,6 @@ public class FeedPageServiceImpl implements FeedPageService {
 	@Override
 	public void insertComment(FeedComment feedComment) {
 		System.out.println("FeedPageServiceImpl - insertComment(댓글 등록)");
-		System.out.println(feedComment);
 		commentDAO.save(feedComment);
 	}
 
@@ -87,28 +90,39 @@ public class FeedPageServiceImpl implements FeedPageService {
 		commentDAO.deleteById(commentno);
 	}
 
-	//좋아요 체크
+   /*
+    * 좋아요(Good) 기능
+    * 
+    */
+	   	
+	//좋아요 선택(insert)
 	@Override
-	public void insertLike(Like like)
+	public void insertGood(Good good) 
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		System.out.println("FeedPageServiceImpl - insertGood(좋아요 입력!)");
 		
+		goodDAO.save(good);
+		System.out.println(good);
+		System.out.println("FeedPageServiceImpl - 하트 체크 성공!");
 	}
 
-	//좋아요 체크 여부
+	//좋아요 체크여부 확인(1: checked / 0:unchecked)
 	@Override
-	public int likeByUserChk(Map<String, Object> map)
+	public int goodByUserChk(Map<String,Object> mapChk) 
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		return 0;
+		System.out.println("FeedPageServiceImpl - goodByUserChk(좋아요 체크여부 판단)");
+		int chkResultCnt = sqlSession.selectOne("com.np.wearound.mappers.FeedMapper.goodChk",mapChk);
+		return chkResultCnt;
 	}
 
-	//좋아요 체크해제
+	//좋아요 해지(삭제)
 	@Override
-	public void deleteLike()
+	public void deleteGood(int userno, int feedcode) 
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		
+		System.out.println("FeedPageServiceImpl - deleteGood(좋아요 체크해제 성공)");
+		goodDAO.deleteByUsernoAndFeedcode(userno,feedcode);
 	}
+
+
 
 }

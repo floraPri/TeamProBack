@@ -1,8 +1,10 @@
 package com.np.wearound.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.np.wearound.dto.FeedDTO;
 import com.np.wearound.entities.FeedComment;
+import com.np.wearound.entities.Good;
 import com.np.wearound.service.FeedPageServiceImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -36,7 +39,6 @@ public class FeedController {
 	
 	@Autowired
 	private FeedPageServiceImpl service;
-	
 	
 	//피드목록 페이지
 	@GetMapping("/feedPage")
@@ -62,8 +64,6 @@ public class FeedController {
 		return feed_list;
 	}
 	
-	
-
 	//등록회원별 목록 페이지
 	@GetMapping("/feedListByIdPage")
 	public List<FeedDTO> feedListByUserid(@RequestParam String userid) 
@@ -87,7 +87,6 @@ public class FeedController {
 		return comment_list;
 	}
 
-
 	//피드 댓글 입력
 	@PostMapping("/commentAdd")
 	public String commentAdd(@RequestBody Map<String,String> map)
@@ -107,15 +106,80 @@ public class FeedController {
 		return "feedPage";
 	}
 	
-	
-	//좋아요 선택(insert)
-	public String likeAdd(@RequestParam int useno) 
+	//좋아요 선택 시 체크확인하여 두 가지 동작 작동
+	@PostMapping("/goodcheck")
+	public int goodCheck(@RequestBody Map<String, String> map) 
 			throws ServletException, IOException {
-			
-			return "";
-	}	
+		logger.info("<<<< FeedController -  goodcheck(좋아요 성공)  >>>>");
+		int feedcode = Integer.parseInt(map.get("feedcode"));
+		int userno = Integer.parseInt(map.get("userno"));
+		
+		Map<String,Object> chkMap = new HashMap<String,Object>();
+		chkMap.put("feedcode",feedcode);
+		chkMap.put("userno",userno);
+		
+		//좋아요 체크 여부 확인
+		int resultCnt = service.goodByUserChk(chkMap);
+		System.out.println("resultCnt : "+ resultCnt);
+		if(resultCnt != 0) {
+			// checkedCnt == 1 이면 이미 체크 상태 -> 그러면 삭제!
+			System.out.println("unchecked");
+			service.deleteGood(userno,feedcode);
+			return 0;
+		} else {
+			// checkedCnt == 0은 unchecked 상태 -> 체크하기...insert
+			System.out.println("checked");
+			Good good = new Good();
+			good.setFeedcode(feedcode);
+			good.setUserno(userno);
+			service.insertGood(good);
+			return 1;
+		}
+	}
 	
+	//좋아요 체크여부 결과 보내기
+	@GetMapping(value="/goodcheck")
+	public int goodChkResult(
+			@RequestParam("feedcode") int feedcode,
+			@RequestParam("userno") int userno
+	)
+			throws ServletException, IOException {
+		logger.info("<<<< FeedController -  goodChkResult(체크여부 결과)  >>>>");
+		
+		Map<String,Object> chkResult = new HashMap<String,Object>();
+		
+		chkResult.put("feedcode",feedcode);
+		chkResult.put("userno",userno);		
+		
+		System.out.println("chkResult ::::: "+service.goodByUserChk(chkResult));
+		return service.goodByUserChk(chkResult);
+	}
 	
-	//좋아요 취소(delete)
+//	//좋아요 선택(insert)
+//	@PostMapping("/goodcheck")
+//	public void goodAdd(@RequestBody Map<String, String> map) 
+//			throws ServletException, IOException {
+//		logger.info("<<<< FeedController -  goodAdd(좋아요 성공)  >>>>");
+//		int feedcode = Integer.parseInt(map.get("feedcode"));
+//		int userno = Integer.parseInt(map.get("userno"));
+//		
+//		Good good = new Good();
+//		good.setFeedcode(feedcode);
+//		good.setUserno(userno);
+//		service.insertGood(good);
+//	}	
+
+//	//좋아요 체크 여부 확인
+//	public int goodChk(@RequestParam int userno, @RequestParam int feedcode) 
+//			throws ServletException, IOException {
+//		int checkedCnt = service.goodByUserChk(userno, feedcode);
+//		return checkedCnt;
+//	}
+//	
+//	//좋아요 취소(delete)
+//	public void goodDelete(@RequestParam int userno)
+//			throws ServletException, IOException {
+//		service.deleteGood(userno);
+//	}
 		
 }

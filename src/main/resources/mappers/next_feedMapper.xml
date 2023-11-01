@@ -60,5 +60,12 @@
 		]]>
 	</select>
 	
+	<select id="goodChk" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*)
+		FROM good_tbl
+		WHERE userno = #{userno}
+		AND feedcode = #{feedcode}
+	</select>
+	
 	
 </mapper>     

@@ -3,6 +3,7 @@ package com.np.wearound.service;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +12,7 @@ import org.springframework.ui.Model;
 
 import com.np.wearound.dto.FeedDTO;
 import com.np.wearound.entities.FeedComment;
-import com.np.wearound.entities.Like;
+import com.np.wearound.entities.Good;
 
 public interface FeedPageService {
 	//피드목록 출력
@@ -32,18 +33,18 @@ public interface FeedPageService {
 	public void deleteCommnet(int commentno);
 	
 	//좋아요 처리 (isnert)
-	public void insertLike(Like like) 
-			throws ServletException, IOException;
+	public void insertGood(Good good) 
+	         throws ServletException, IOException;
 	
 	//좋아요 체크 사용자 일치여부
-	public int likeByUserChk(Map<String,Object> map) 
-			throws ServletException, IOException;
+	public int goodByUserChk(Map<String,Object> mapChk) 
+	         throws ServletException, IOException;
 	
-	//좋아요 해지 (update isChecked => 'N')
-	public void deleteLike() 
-			throws ServletException, IOException;
+	//좋아요 해지 (delete)
+	public void deleteGood(int userno, int feedcode)
+			 throws ServletException, IOException;
 	
 	
-	
+
 
 }
