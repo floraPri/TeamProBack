@@ -117,11 +117,25 @@ public class FeedPageServiceImpl implements FeedPageService {
 
 	//좋아요 해지(삭제)
 	@Override
-	public void deleteGood(int userno, int feedcode) 
+	public void deleteGood(int userno, int feedcode)
 			throws ServletException, IOException {
 		System.out.println("FeedPageServiceImpl - deleteGood(좋아요 체크해제 성공)");
 		goodDAO.deleteByUsernoAndFeedcode(userno,feedcode);
 	}
+
+	//feedcode별 좋아요 갯수
+	@Override
+	public int goodCount(int feedcode)
+			throws ServletException, IOException {
+		System.out.println("FeedPageServiceImpl - goodCount(피드별 좋아요 갯수)");
+		int goodCnt = sqlSession.selectOne("com.np.wearound.mappers.FeedMapper.goodCount",feedcode);
+		return goodCnt;
+	}
+	
+	
+	
+	
+	
 
 
 

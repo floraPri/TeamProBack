@@ -44,7 +44,9 @@ public interface FeedPageService {
 	public void deleteGood(int userno, int feedcode)
 			 throws ServletException, IOException;
 	
-	
+	//feedcode별 좋아요 수
+	public int goodCount(int feedcode)
+		throws ServletException, IOException;
 
 
 }

@@ -60,11 +60,21 @@
 		]]>
 	</select>
 	
+	<!-- 좋아요 체크여부 확인 -->
 	<select id="goodChk" parameterType="java.util.Map" resultType="int">
 		SELECT COUNT(*)
 		FROM good_tbl
 		WHERE userno = #{userno}
 		AND feedcode = #{feedcode}
+	</select>
+	
+	<select id="goodCount" parameterType="int" resultType="int">
+		<![CDATA[ 
+			SELECT COUNT (*)
+			FROM feed_tbl f, good_tbl g
+			WHERE f.feedcode = g.feedcode
+			AND f.feedcode = #{feedcode}
+		]]>
 	</select>
 	
 	

@@ -106,7 +106,7 @@ public class FeedController {
 		return "feedPage";
 	}
 	
-	//좋아요 선택 시 체크확인하여 두 가지 동작 작동
+	//좋아요 선택 시 체크확인하여 두 가지 동작 작동 //(좋아요 체크, 해지가 체크여부에 따라 동시에 일어남)
 	@PostMapping("/goodcheck")
 	public int goodCheck(@RequestBody Map<String, String> map) 
 			throws ServletException, IOException {
@@ -137,49 +137,44 @@ public class FeedController {
 		}
 	}
 	
-	//좋아요 체크여부 결과 보내기
+	//좋아요 체크여부 결과
 	@GetMapping(value="/goodcheck")
-	public int goodChkResult(
-			@RequestParam("feedcode") int feedcode,
-			@RequestParam("userno") int userno
-	)
+	public String goodChkResult(@RequestBody Map<String,String> map,
+			Model model)
 			throws ServletException, IOException {
 		logger.info("<<<< FeedController -  goodChkResult(체크여부 결과)  >>>>");
 		
 		Map<String,Object> chkResult = new HashMap<String,Object>();
 		
-		chkResult.put("feedcode",feedcode);
-		chkResult.put("userno",userno);		
+		int feedcode = Integer.parseInt(map.get("feedcode"));
+		int userno = map.containsKey("userno") ? Integer.parseInt(map.get("userno")) : -1;
 		
-		System.out.println("chkResult ::::: "+service.goodByUserChk(chkResult));
-		return service.goodByUserChk(chkResult);
+//		if(userno == -1) {
+//			goodCnt = service.goodCount(feedcode); //피드 별 갯수
+//			model.addAttribute("goodCnt", goodCnt);
+//		}else {
+//			chkResult.put("userno",userno);
+//			chkResult.put("feedcode",feedcode);
+//			
+//			goodCnt = service.goodCount(feedcode); //피드 별 갯수
+//			int goodChk = service.goodByUserChk(chkResult); //체크여부
+//			model.addAttribute("goodCnt", goodCnt);
+//			model.addAttribute("goodChk", goodChk);
+//		}
+		
+		return "goodcheck";
+	}
+
+	
+	@GetMapping("/goodcount")
+	public int goodCount(@RequestParam int feedcode)
+			throws ServletException, IOException {
+		logger.info("<<<< FeedController -  goodCount(좋아요 카운트)  >>>>");
+		
+		int goodCnt = service.goodCount(feedcode); //피드 별 갯수
+	    logger.info("feedcode: " + feedcode); // feedcode 값 출력
+	    logger.info("goodCnt: " + goodCnt);
+		return goodCnt;
 	}
 	
-//	//좋아요 선택(insert)
-//	@PostMapping("/goodcheck")
-//	public void goodAdd(@RequestBody Map<String, String> map) 
-//			throws ServletException, IOException {
-//		logger.info("<<<< FeedController -  goodAdd(좋아요 성공)  >>>>");
-//		int feedcode = Integer.parseInt(map.get("feedcode"));
-//		int userno = Integer.parseInt(map.get("userno"));
-//		
-//		Good good = new Good();
-//		good.setFeedcode(feedcode);
-//		good.setUserno(userno);
-//		service.insertGood(good);
-//	}	
-
-//	//좋아요 체크 여부 확인
-//	public int goodChk(@RequestParam int userno, @RequestParam int feedcode) 
-//			throws ServletException, IOException {
-//		int checkedCnt = service.goodByUserChk(userno, feedcode);
-//		return checkedCnt;
-//	}
-//	
-//	//좋아요 취소(delete)
-//	public void goodDelete(@RequestParam int userno)
-//			throws ServletException, IOException {
-//		service.deleteGood(userno);
-//	}
-		
 }
