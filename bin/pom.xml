@@ -119,11 +119,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
-		<dependency>
+		<!-- elasticsearch -->
+		 <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-		</dependency>
-
+		</dependency> 
+		<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
@@ -135,15 +136,27 @@
     
     <!-- 웹 소켓 연결 -->
     
-    <dependency>
+<!--     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-messaging</artifactId>
     </dependency>
     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-websocket</artifactId>
-    </dependency>  
-        
+    </dependency>   -->
+    
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-websocket</artifactId>
+    </dependency>
+    
+      <!-- json 라이브러리 -->
+      <dependency>
+          <groupId>com.googlecode.json-simple</groupId>
+          <artifactId>json-simple</artifactId>
+          <version>1.1.1</version>
+      </dependency>    
+          
 	</dependencies>
 
 	<build>

@@ -149,32 +149,8 @@ public class FeedController {
 		int feedcode = Integer.parseInt(map.get("feedcode"));
 		int userno = map.containsKey("userno") ? Integer.parseInt(map.get("userno")) : -1;
 		
-//		if(userno == -1) {
-//			goodCnt = service.goodCount(feedcode); //피드 별 갯수
-//			model.addAttribute("goodCnt", goodCnt);
-//		}else {
-//			chkResult.put("userno",userno);
-//			chkResult.put("feedcode",feedcode);
-//			
-//			goodCnt = service.goodCount(feedcode); //피드 별 갯수
-//			int goodChk = service.goodByUserChk(chkResult); //체크여부
-//			model.addAttribute("goodCnt", goodCnt);
-//			model.addAttribute("goodChk", goodChk);
-//		}
-		
 		return "goodcheck";
 	}
 
-	
-	@GetMapping("/goodcount")
-	public int goodCount(@RequestParam int feedcode)
-			throws ServletException, IOException {
-		logger.info("<<<< FeedController -  goodCount(좋아요 카운트)  >>>>");
-		
-		int goodCnt = service.goodCount(feedcode); //피드 별 갯수
-	    logger.info("feedcode: " + feedcode); // feedcode 값 출력
-	    logger.info("goodCnt: " + goodCnt);
-		return goodCnt;
-	}
 	
 }

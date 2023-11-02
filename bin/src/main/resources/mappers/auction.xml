@@ -5,7 +5,7 @@
 
 <mapper namespace="com.np.wearound.auctionDao.AuctionDao">
 	<insert id="AuctionAdd" parameterType="com.np.wearound.auctionEntity.AuctionEntity">
-		INSERT INTO Auction(auctionno, userno, auctiontitle, image, auctioncontent, buynow, startprice, lastprice, minbid) 
+		INSERT INTO Auction(auctionno, userno, auctiontitle, image, auctioncontent, buynow, startprice, lastprice, minbid, hostname) 
 		VALUES(auctionno_seq.NEXTVAL, 
 		       (SELECT userno FROM user_tbl WHERE userno = #{userno}), 
 		       #{auctiontitle}, 
@@ -14,7 +14,8 @@
 		       #{buynow}, 
 		       #{startprice}, 
 		       #{lastprice}, 
-		       #{minbid}
+		       #{minbid},
+		       (SELECT name FROM user_tbl WHERE userno = #{userno})
 		)
 	</insert>
 	
@@ -25,18 +26,19 @@
 			  auctioncontent = #{auctioncontent},
 			  buynow = #{buynow},
 			  startprice = #{startprice},
-			  minbid = #{minbid}
+			  minbid = #{minbid},
+			  image = #{image}
 			WHERE auctionno = #{auctionno}
 	</update>
 	
 	<select id="AuctionHost" parameterType="int" resultType="com.np.wearound.auctionDto.AuctionHostDTO">
 		SELECT auctionno
-			, userno
-			, auctiontitle
-			, image
-			, lastprice
-			, lasttime
-			, name
+			 , userno
+			 , auctiontitle
+			 , image
+			 , lastprice
+			 , lasttime
+			 , name
 		 FROM Auction
 		 WHERE userno = #{userno}
 	</select>
@@ -54,20 +56,19 @@
 		 WHERE AuctionBiding.name = #{name}	
 	</select>
 	
-	<select id="AuctionBider" parameterType="int" resultType="com.np.wearound.auctionDto.AuctionBiderDTO">
+	<select id="AuctionBider" parameterType="String" resultType="com.np.wearound.auctionDto.AuctionBiderDTO">
 		SELECT AuctionBidder.auctionbidderno
 		     , AuctionBidder.auctionno
-		     , AuctionBidder.userno
+		     , AuctionBidder.name
 		     , AuctionBidder.bidprice
 		     , AuctionBidder.auEndTime
 			 , Auction.auctiontitle
 			 , Auction.image
 		FROM AuctionBidder
 		JOIN Auction ON AuctionBidder.auctionno = Auction.auctionno
-		WHERE AuctionBidder.userno =  #{userno}
+		WHERE AuctionBidder.name =  #{name}
 	</select>
 	
-<<<<<<< HEAD
 	<insert id="AuctionStart" parameterType="com.np.wearound.auctionEntity.AuctionBidingEntity">
 		INSERT INTO auctionbiding(auctionbidderno, auctionno, name)
 		VALUES (auctionbiding_seq.nextval, 
@@ -91,6 +92,35 @@
 			WHERE auctionno = #{auctionno}
 	</update>	
 	
-=======
->>>>>>> origin/branch_kmj2
+	<select id="AuctionBidfind" parameterType="com.np.wearound.auctionDto.AuctionBidingDTO" resultType="int">
+		SELECT COUNT(*)
+		 FROM AUCTIONBIDING
+		 WHERE auctionno = #{auctionno}
+		   AND name = #{name}
+	</select>
+	
+	<insert id="AuctionBiderAdd" parameterType="com.np.wearound.auctionEntity.AuctionBidderEntity">
+		INSERT INTO auctionbidder(auctionbidderno, auctionno, name, bidprice)
+		VALUES (#{auctionbidderno}, 
+				#{auctionno}, 
+			    #{name},
+			    #{bidprice}
+			   )
+	</insert>	
+	
+	<update id="AuctionSetEndTime" parameterType="com.np.wearound.auctionEntity.AuctionEntity">
+		UPDATE Auction
+			SET
+			  lasttime = sysdate,
+			  name = #{name}
+			WHERE auctionno = #{auctionno}		
+	</update>
+	
+	<select id="AuctionbiderCheck" parameterType="com.np.wearound.auctionEntity.AuctionBidderEntity" resultType="int">
+		SELECT COUNT(*)
+		 FROM auctionbidder
+		 WHERE auctionno = #{auctionno}
+		   AND name = #{name}		
+	</select>
+	
 </mapper>

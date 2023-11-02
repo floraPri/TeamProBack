@@ -16,9 +16,11 @@
 		        , f.feedimg     AS feedimg
 		        , f.feedregdate     AS feedregdate
 		        , f.comment_cnt     AS comment_cnt
-			 FROM feed_tbl f, user_tbl u
-			WHERE f.userno = u.userno
-			ORDER BY f.feedregdate DESC
+        		, (SELECT Count(*) FROM good_tbl WHERE feedcode = f.feedcode) AS good_count
+		  	 FROM feed_tbl f
+		     JOIN user_tbl u ON f.userno = u.userno
+	    LEFT JOIN good_tbl g ON f.feedcode = g.feedcode
+	     ORDER BY f.feedregdate DESC;
 		]]>
 	</select>
 	
@@ -53,10 +55,11 @@
 	        , u.name     AS username
 	        , f.feedregdate     AS feedregdate
 	        , f.comment_cnt     AS comment_cnt
-		FROM feed_tbl f, user_tbl u
-		WHERE f.userno = u.userno
-		AND u.email = #{userid}
-		ORDER BY f.feedregdate DESC
+        	, (SELECT Count(*) FROM good_tbl WHERE feedcode = f.feedcode) AS good_count
+		  FROM feed_tbl f
+		  JOIN user_tbl u ON f.userno = u.userno
+	 LEFT JOIN good_tbl g ON f.feedcode = g.feedcode
+	  ORDER BY f.feedregdate DESC
 		]]>
 	</select>
 	
@@ -68,14 +71,7 @@
 		AND feedcode = #{feedcode}
 	</select>
 	
-	<select id="goodCount" parameterType="int" resultType="int">
-		<![CDATA[ 
-			SELECT COUNT (*)
-			FROM feed_tbl f, good_tbl g
-			WHERE f.feedcode = g.feedcode
-			AND f.feedcode = #{feedcode}
-		]]>
-	</select>
+
 	
 	
 </mapper>     

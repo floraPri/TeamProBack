@@ -123,14 +123,7 @@ public class FeedPageServiceImpl implements FeedPageService {
 		goodDAO.deleteByUsernoAndFeedcode(userno,feedcode);
 	}
 
-	//feedcode별 좋아요 갯수
-	@Override
-	public int goodCount(int feedcode)
-			throws ServletException, IOException {
-		System.out.println("FeedPageServiceImpl - goodCount(피드별 좋아요 갯수)");
-		int goodCnt = sqlSession.selectOne("com.np.wearound.mappers.FeedMapper.goodCount",feedcode);
-		return goodCnt;
-	}
+
 	
 	
 	

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+     
+<mapper namespace="com.np.wearound.mappers.FeedMapper">
+	
+	<!--구매목록 -->
+	<select id="feedList" resultType="com.np.wearound.dto.FeedDTO">
+		<![CDATA[ 
+			SELECT f.feedcode   AS feedcode
+		        , u.email   AS userid
+		        , f.feedtitle   AS feedtitle
+		        , u.name   AS username
+		        , f.feedcontent     AS feedcontent
+		        , f.feedimg     AS feedimg
+		        , f.feedregdate     AS feedregdate
+		        , f.comment_cnt     AS comment_cnt
+			 FROM feed_tbl f, user_tbl u
+			WHERE f.userno = u.userno
+			ORDER BY f.feedregdate DESC
+		]]>
+	</select>
+	
+	<!--무한스크롤 페이징 -->
+	<select id="feedListScroll" parameterType="Map" resultType="com.np.wearound.dto.FeedDTO">
+		<![CDATA[ 
+			SELECT * 
+			FROM (
+			    SELECT f.feedcode AS feedcode,
+			           u.email AS userid,
+			           f.feedtitle AS feedtitle,
+			           f.feedcontent AS feedcontent,
+			           f.feedimg AS feedimg,
+			           u.name   AS username,
+			           f.feedregdate AS feedregdate,
+			           f.comment_cnt AS comment_cnt,
+			           ROW_NUMBER() OVER (ORDER BY f.feedregdate DESC) AS rnum
+			    FROM feed_tbl f
+			    JOIN user_tbl u ON f.userno = u.userno
+			) 
+			WHERE rnum BETWEEN #{start} AND #{end}
+		]]>
+	</select>
+	
+	<select id="feedListById" parameterType="String" resultType="com.np.wearound.dto.FeedDTO">
+		<![CDATA[ 
+		SELECT f.feedcode   AS feedcode
+	        , u.email   AS userid
+	        , f.feedtitle   AS feedtitle
+	        , f.feedcontent     AS feedcontent
+	        , f.feedimg     AS feedimg
+	        , u.name     AS username
+	        , f.feedregdate     AS feedregdate
+	        , f.comment_cnt     AS comment_cnt
+		FROM feed_tbl f, user_tbl u
+		WHERE f.userno = u.userno
+		AND u.email = #{userid}
+		ORDER BY f.feedregdate DESC
+		]]>
+	</select>
+	
+	<!-- 좋아요 체크여부 확인 -->
+	<select id="goodChk" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*)
+		FROM good_tbl
+		WHERE userno = #{userno}
+		AND feedcode = #{feedcode}
+	</select>
+	
+	<select id="goodCount" parameterType="int" resultType="int">
+		<![CDATA[ 
+			SELECT COUNT (*)
+			FROM feed_tbl f, good_tbl g
+			WHERE f.feedcode = g.feedcode
+			AND f.feedcode = #{feedcode}
+		]]>
+	</select>
+	
+	
+</mapper>     
