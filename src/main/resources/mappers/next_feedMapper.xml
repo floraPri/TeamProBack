@@ -71,6 +71,17 @@
 		AND feedcode = #{feedcode}
 	</select>
 	
+	<select id="goodChk_re" parameterType="java.util.Map" resultType="int">
+		<![CDATA[ 
+		  SELECT COALESCE((SELECT COUNT(*) FROM good_tbl WHERE feedcode = f.feedcode AND userno= u.userno),0) AS chk
+			FROM good_tbl g
+			JOIN feed_tbl f ON f.feedcode = g.feedcode
+	   LEFT JOIN user_tbl u ON u.userno = g.userno
+		   WHERE u.userno = #{userno}
+			 AND f.feedcode = #{feedcode}
+		]]>
+	</select>
+	
 
 	
 	

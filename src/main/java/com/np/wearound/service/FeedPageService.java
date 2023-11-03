@@ -40,6 +40,11 @@ public interface FeedPageService {
 	public int goodByUserChk(Map<String,Object> mapChk) 
 	         throws ServletException, IOException;
 	
+	
+	//좋아요 체크 사용자 일치여부2
+	public int goodByUserChk2(Map<String,Object> mapChk) 
+	         throws ServletException, IOException;	
+	
 	//좋아요 해지 (delete)
 	public void deleteGood(int userno, int feedcode)
 			 throws ServletException, IOException;

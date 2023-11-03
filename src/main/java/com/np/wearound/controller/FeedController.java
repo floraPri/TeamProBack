@@ -138,18 +138,29 @@ public class FeedController {
 	}
 	
 	//좋아요 체크여부 결과
-	@GetMapping(value="/goodcheck")
-	public String goodChkResult(@RequestBody Map<String,String> map,
-			Model model)
+	@GetMapping("/goodcheck")
+	public int goodChkResult(
+			@RequestParam("feedcode") int feedcode,
+			@RequestParam("userno") int userno)
 			throws ServletException, IOException {
 		logger.info("<<<< FeedController -  goodChkResult(체크여부 결과)  >>>>");
 		
 		Map<String,Object> chkResult = new HashMap<String,Object>();
 		
-		int feedcode = Integer.parseInt(map.get("feedcode"));
-		int userno = map.containsKey("userno") ? Integer.parseInt(map.get("userno")) : -1;
+		chkResult.put("feedcode",feedcode);
+		chkResult.put("userno",userno);
 		
-		return "goodcheck";
+		int resultCnt = service.goodByUserChk(chkResult);
+		
+		if(resultCnt != 0) {
+			System.out.println("check상태:: true---"+resultCnt);
+			return 1;
+		} else {
+			// checkedCnt == 0은 unchecked 상태 -> 체크하기...insert			
+			System.out.println("check상태:: false---"+resultCnt);
+			return 0;
+		}
+		
 	}
 
 	

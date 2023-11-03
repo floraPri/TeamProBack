@@ -123,6 +123,14 @@ public class FeedPageServiceImpl implements FeedPageService {
 		goodDAO.deleteByUsernoAndFeedcode(userno,feedcode);
 	}
 
+	@Override
+	public int goodByUserChk2(Map<String, Object> mapChk)
+			throws ServletException, IOException {
+		System.out.println("FeedPageServiceImpl - goodByUserChk2(체크여부 프론트로 반환하기)");
+		int chkResultCnt = sqlSession.selectOne("com.np.wearound.mappers.FeedMapper.goodChk_re",mapChk);
+		return chkResultCnt;
+	}
+
 
 	
 	
