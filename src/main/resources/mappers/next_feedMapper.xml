@@ -20,7 +20,7 @@
 		  	 FROM feed_tbl f
 		     JOIN user_tbl u ON f.userno = u.userno
 	    LEFT JOIN good_tbl g ON f.feedcode = g.feedcode
-	     ORDER BY f.feedregdate DESC;
+	     ORDER BY f.feedregdate DESC
 		]]>
 	</select>
 	
@@ -37,9 +37,11 @@
 			           u.name   AS username,
 			           f.feedregdate AS feedregdate,
 			           f.comment_cnt AS comment_cnt,
+			           (SELECT Count(*) FROM good_tbl WHERE feedcode = f.feedcode) AS good_count,
 			           ROW_NUMBER() OVER (ORDER BY f.feedregdate DESC) AS rnum
-			    FROM feed_tbl f
-			    JOIN user_tbl u ON f.userno = u.userno
+				FROM feed_tbl f
+		  		JOIN user_tbl u ON f.userno = u.userno
+	 	   LEFT JOIN good_tbl g ON f.feedcode = g.feedcode
 			) 
 			WHERE rnum BETWEEN #{start} AND #{end}
 		]]>
@@ -71,18 +73,29 @@
 		AND feedcode = #{feedcode}
 	</select>
 	
-	<select id="goodChk_re" parameterType="java.util.Map" resultType="int">
-		<![CDATA[ 
-		  SELECT COALESCE((SELECT COUNT(*) FROM good_tbl WHERE feedcode = f.feedcode AND userno= u.userno),0) AS chk
-			FROM good_tbl g
-			JOIN feed_tbl f ON f.feedcode = g.feedcode
-	   LEFT JOIN user_tbl u ON u.userno = g.userno
-		   WHERE u.userno = #{userno}
-			 AND f.feedcode = #{feedcode}
-		]]>
+	<!-- 팔로우 ,팔로잉 관련 Select문 -->
+	
+	<select id="isFollow" parameterType="map" resultType="com.np.wearound.entities.Follow">
+		select * from follow_tbl
+		where following=#{following} and follower=#{follower}
 	</select>
 	
-
+	<select id="feedByIdCnt" parameterType="String" resultType="int">
+		SELECT count(*)
+		FROM feed_tbl f, user_tbl u
+		WHERE f.userno = u.userno
+		and u.name=#{username}
+	</select>
+	
+	<select id="followerByIdCnt" parameterType="String" resultType="int">
+		select count(*) from follow_tbl
+		where follower=#{follower}
+	</select>
+	
+	<select id="followingByIdCnt" parameterType="String" resultType="int">
+		select count(*) from follow_tbl
+		where following=#{following}
+	</select>
 	
 	
 </mapper>     

@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.np.wearound.dto.FeedDTO;
 import com.np.wearound.entities.FeedComment;
+import com.np.wearound.entities.Follow;
 import com.np.wearound.entities.Good;
 import com.np.wearound.service.FeedPageServiceImpl;
 
@@ -141,10 +143,9 @@ public class FeedController {
 	@GetMapping("/goodcheck")
 	public int goodChkResult(
 			@RequestParam("feedcode") int feedcode,
-			@RequestParam("userno") int userno)
-			throws ServletException, IOException {
+			@RequestParam("userno") int userno) throws ServletException, IOException {
 		logger.info("<<<< FeedController -  goodChkResult(체크여부 결과)  >>>>");
-		
+	
 		Map<String,Object> chkResult = new HashMap<String,Object>();
 		
 		chkResult.put("feedcode",feedcode);
@@ -160,8 +161,56 @@ public class FeedController {
 			System.out.println("check상태:: false---"+resultCnt);
 			return 0;
 		}
-		
 	}
-
+		
+	// 구독 확인
+	@GetMapping("/isFollow")
+	public Follow isfollow(@RequestParam String following, @RequestParam String follower)
+		throws ServletException, IOException {
+		logger.info("<<< FeedController - isfollow >>>");
+		Follow dto = service.isFollow(following, follower);
+		return dto;
+	}
+	
+	// 구독하기
+	@PostMapping("/doFollow")
+	public void doFollow(@RequestBody Follow follow) 
+			throws ServletException, IOException {
+		logger.info("<<< FeedController - doFollow >>>");
+		service.doFollow(follow);
+	}
+	
+	// 구독 취소하기
+	@DeleteMapping("/quitFollow")
+	public void quitFollow(@RequestParam int follownum) 
+			throws ServletException, IOException {
+		logger.info("<<< FeedController - quitFollow >>>");
+		service.quitFollow(follownum);
+    
+	}
+	
+	// 게시물 카운트
+	@GetMapping("/feedByIdCnt")
+	public int feedByIdCnt(@RequestParam String username)
+			throws ServletException, IOException{
+		logger.info("<<< FeedController - feedByIdCnt >>>");
+		return service.feedByIdCnt(username);
+	}
+	
+	// 팔로워 카운트
+	@GetMapping("/followerByIdCnt")
+	public int followerByIdCnt(@RequestParam String follower) 
+			throws ServletException, IOException {
+		logger.info("<<< FeedController - followerByIdCnt >>>");
+		return service.followerByIdCnt(follower);
+	}
+	
+	// 팔로잉 카운트
+	@GetMapping("/followingByIdCnt")
+	public int followingByIdCnt(@RequestParam String following) 
+			throws ServletException, IOException{
+		logger.info("<<< FeedController - followingByIdCnt >>>");
+		return service.followingByIdCnt(following);
+	}
 	
 }

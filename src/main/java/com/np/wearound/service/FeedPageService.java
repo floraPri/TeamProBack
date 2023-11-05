@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 
 import com.np.wearound.dto.FeedDTO;
 import com.np.wearound.entities.FeedComment;
+import com.np.wearound.entities.Follow;
 import com.np.wearound.entities.Good;
 
 public interface FeedPageService {
@@ -40,15 +41,33 @@ public interface FeedPageService {
 	public int goodByUserChk(Map<String,Object> mapChk) 
 	         throws ServletException, IOException;
 	
-	
-	//좋아요 체크 사용자 일치여부2
-	public int goodByUserChk2(Map<String,Object> mapChk) 
-	         throws ServletException, IOException;	
-	
 	//좋아요 해지 (delete)
 	public void deleteGood(int userno, int feedcode)
 			 throws ServletException, IOException;
 	
-
+	//팔로우 확인
+	public Follow isFollow(String following, String follower)
+			throws ServletException, IOException;
+	
+	//팔로우 하기
+	public void doFollow(Follow follow)
+			throws ServletException, IOException;
+	
+	//팔로우 취소
+	public void quitFollow(int follownum)
+			throws ServletException, IOException;
+	
+	//게시물 갯수
+	public int feedByIdCnt(String username)
+			throws ServletException, IOException;
+	
+	//팔로우 갯수
+	public int followerByIdCnt(String follower)
+			throws ServletException, IOException;
+	
+	//팔로잉 갯수
+	public int followingByIdCnt(String following)
+			throws ServletException, IOException;
+	
 
 }
