@@ -20,7 +20,6 @@
 		  	 FROM feed_tbl f
 		     JOIN user_tbl u ON f.userno = u.userno
 	    LEFT JOIN good_tbl g ON f.feedcode = g.feedcode
-	     ORDER BY f.feedregdate DESC
 		]]>
 	</select>
 	
@@ -61,7 +60,6 @@
 		  FROM feed_tbl f
 		  JOIN user_tbl u ON f.userno = u.userno
 	 LEFT JOIN good_tbl g ON f.feedcode = g.feedcode
-	  ORDER BY f.feedregdate DESC
 		]]>
 	</select>
 	

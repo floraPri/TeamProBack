@@ -84,6 +84,7 @@ public class UserAuthProvider {
 		System.out.println("토큰 사용자 이메일 : " + decoded.getIssuer());
 		System.out.println("<<<UserAuthProvider - validateToken 2>>>");
 		UserDTO user = userService.findById(decoded.getIssuer());
+		System.out.println("!!!");
 		String role = decoded.getClaim("roles").asString();
 		System.out.println("토큰 클레임 내 권한 정보 : " + role);
 		List<GrantedAuthority> authorities = new ArrayList<>();

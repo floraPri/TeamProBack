@@ -108,7 +108,7 @@ public class FeedPageServiceImpl implements FeedPageService {
 		System.out.println("FeedPageServiceImpl - insertGood(좋아요 입력!)");
 		
 		goodDAO.save(good);
-		System.out.println(good);
+		System.out.println("!!@@@@" + good);
 		System.out.println("FeedPageServiceImpl - 하트 체크 성공!");
 	}
 
