@@ -18,7 +18,6 @@ public class WebConfig {
 	
 	@Bean
 	public FilterRegistrationBean corsFilter() {
-		System.out.println("<<<< WebConfig - corsFilter >>>>");
 		
 		//import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -26,15 +25,14 @@ public class WebConfig {
 		//프론트엔드가 일부 자격증명을 보내면 그것들을 받아들여야 한다.
 		CorsConfiguration config = new CorsConfiguration();
 		
-		System.out.println("<<<WebConfig-1>>>");
 		config.setAllowCredentials(true);
+//		config.addAllowedOriginPattern("*");
 		config.addAllowedOrigin("http://localhost:3000");
 		config.setAllowedHeaders(Arrays.asList(
 				HttpHeaders.AUTHORIZATION,
 				HttpHeaders.CONTENT_TYPE,
 				HttpHeaders.ACCEPT
 				));
-		System.out.println("<<<WebConfig-2>>>");
 		config.setAllowedMethods(Arrays.asList(
 				HttpMethod.GET.name(),
 				HttpMethod.POST.name(),
@@ -45,11 +43,9 @@ public class WebConfig {
 		config.setMaxAge(3600L);
 		source.registerCorsConfiguration("/**", config);	//Spring Security 필터전에 사용하기 위해 요청에 적용
 		
-		System.out.println("<<<WebConfig-3>>>");
 		FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
 		bean.setOrder(-102); //가장 낮은 위치
 		
-		System.out.println("<<<WebConfig-4>>>");
 		
 		return bean;
 		

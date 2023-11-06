@@ -130,50 +130,49 @@ public class WeatherApiController {
 		//model.addAttribute("parse_item", parse_item);
 		
 		Map<String, Object> t1hList = new HashMap<>();
-		for (int i = 0; i < parse_item.size(); i++) {
-		    weather = (JSONObject) parse_item.get(i);
-		    category = (String) weather.get("category");
-		    if ("T1H".equals(category)) {
-		        // "T1H" 카테고리의 값을 추출하여 리스트에 추가합니다.
-		    	String t1hValue1 = (String) weather.get("obsrValue");
-		    	double t1hValue = Double.parseDouble(t1hValue1);
-		        t1hList.put("t1hValue", t1hValue);
-		        
-		        if (t1hValue >= 28) {
-		        	String clothes = "민소매, 반팔, 반바지, 짧은 치마, 린넨 옷";
-		        	t1hList.put("clothes", clothes);
-		        }
-		        else if (t1hValue <= 27 && t1hValue >= 23) {
-		        	String clothes = "반팔, 얇은 셔츠, 반바지, 면바지";
-		        	t1hList.put("clothes", clothes);
-		        }
-		        else if (t1hValue <= 22 && t1hValue >= 20) {
-		        	String clothes = "블라우스, 긴팔 티, 면바지, 슬렉스";
-		        	t1hList.put("clothes", clothes);
-		        }
-		        else if (t1hValue <= 19 && t1hValue >= 17) {
-		        	String clothes = "얇은 가디건, 니트, 후드, 맨투맨, 긴 바지";
-		        	t1hList.put("clothes", clothes);
-		        }
-		        else if (t1hValue <= 16 && t1hValue >= 12) {
-		        	String clothes = "자켓, 가디건, 청바지, 니트";
-		        	t1hList.put("clothes", clothes);
-		        }
-		        else if (t1hValue <= 11 && t1hValue >= 9) {
-		        	String clothes = "트렌치 코트, 야상, 점퍼, 스타킹, 기모바지";
-		        	t1hList.put("clothes", clothes);
-		        }
-		        else if (t1hValue <= 8 && t1hValue >= 5) {
-		        	String clothes = "울 코트, 히트텍, 가죽 옷, 기모";
-		        	t1hList.put("clothes", clothes);
-		        }
-		        else {
-		        	String clothes = "롱패팅, 두꺼운 코트, 누빔 옷, 기모, 목도리";
-		        	t1hList.put("clothes", clothes);
-		        }
-		    }
-		}
-		
+	      for (int i = 0; i < parse_item.size(); i++) {
+	          weather = (JSONObject) parse_item.get(i);
+	          category = (String) weather.get("category");
+	          if ("T1H".equals(category)) {
+	              // "T1H" 카테고리의 값을 추출하여 리스트에 추가합니다.
+	             String t1hValue1 = (String) weather.get("obsrValue");
+	             double t1hValue = Double.parseDouble(t1hValue1);
+	              t1hList.put("t1hValue", t1hValue);
+	              
+	              if (t1hValue >= 27.1) {
+	                 String clothes = "민소매, 반팔, 반바지, 짧은 치마, 린넨 옷";
+	                 t1hList.put("clothes", clothes);
+	              }
+	              else if (t1hValue <= 27 && t1hValue >= 22.01) {
+	                 String clothes = "반팔, 얇은 셔츠, 반바지, 면바지";
+	                 t1hList.put("clothes", clothes);
+	              }
+	              else if (t1hValue <= 22 && t1hValue >= 19.01) {
+	                 String clothes = "블라우스, 긴팔 티, 면바지, 슬렉스";
+	                 t1hList.put("clothes", clothes);
+	              }
+	              else if (t1hValue <= 19 && t1hValue >= 16.01) {
+	                 String clothes = "얇은 가디건, 니트, 후드, 맨투맨, 긴 바지";
+	                 t1hList.put("clothes", clothes);
+	              }
+	              else if (t1hValue <= 16 && t1hValue >= 11.01) {
+	                 String clothes = "자켓, 가디건, 청바지, 니트";
+	                 t1hList.put("clothes", clothes);
+	              }
+	              else if (t1hValue <= 11 && t1hValue >= 8.01) {
+	                 String clothes = "트렌치 코트, 야상, 점퍼, 스타킹, 기모바지";
+	                 t1hList.put("clothes", clothes);
+	              }
+	              else if (t1hValue <= 8 && t1hValue >= 0.01) {
+	                 String clothes = "울 코트, 히트텍, 가죽 옷, 기모";
+	                 t1hList.put("clothes", clothes);
+	              }
+	              else {
+	                 String clothes = "롱패팅, 두꺼운 코트, 누빔 옷, 기모, 목도리";
+	                 t1hList.put("clothes", clothes);
+	              }
+	          }
+	      }
 		return t1hList;
 	}
 }
