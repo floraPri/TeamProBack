@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.np.wearound.dto.FeedDTO;
+import com.np.wearound.dto.FeedUserInfoDTO;
 import com.np.wearound.entities.FeedComment;
 import com.np.wearound.entities.Follow;
 import com.np.wearound.entities.Good;
@@ -79,6 +80,15 @@ public class FeedController {
 		System.out.println("컨트롤러 - feed"+feed);
 		return feed;
 	}
+	
+	//게시물, 팔로워, 팔로잉 카운트 (로그인 여부에 상관없이 정보 출력)
+	@GetMapping("/feedHeader")
+	public FeedUserInfoDTO userCountById(@RequestParam String userid) 
+			throws ServletException, IOException {
+		logger.info("<<< FeedController - userCountById >>>");
+		System.out.println("카운트 출력 :::: "+service.countInfo(userid));
+		return service.countInfo(userid);
+	}	
 	
 	//피드 댓글 목록 출력
 	@GetMapping("/commentList")
@@ -189,28 +199,30 @@ public class FeedController {
     
 	}
 	
-	// 게시물 카운트
-	@GetMapping("/feedByIdCnt")
-	public int feedByIdCnt(@RequestParam String username)
-			throws ServletException, IOException{
-		logger.info("<<< FeedController - feedByIdCnt >>>");
-		return service.feedByIdCnt(username);
-	}
+//	// 게시물 카운트
+//	@GetMapping("/feedByIdCnt")
+//	public int feedByIdCnt(@RequestParam String username)
+//			throws ServletException, IOException{
+//		logger.info("<<< FeedController - feedByIdCnt >>>");
+//		return service.feedByIdCnt(username);
+//	}
+//	
+//	// 팔로워 카운트
+//	@GetMapping("/followerByIdCnt")
+//	public int followerByIdCnt(@RequestParam String follower) 
+//			throws ServletException, IOException {
+//		logger.info("<<< FeedController - followerByIdCnt >>>");
+//		return service.followerByIdCnt(follower);
+//	}
+//	
+//	// 팔로잉 카운트
+//	@GetMapping("/followingByIdCnt")
+//	public int followingByIdCnt(@RequestParam String following) 
+//			throws ServletException, IOException{
+//		logger.info("<<< FeedController - followingByIdCnt >>>");
+//		return service.followingByIdCnt(following);
+//	}
 	
-	// 팔로워 카운트
-	@GetMapping("/followerByIdCnt")
-	public int followerByIdCnt(@RequestParam String follower) 
-			throws ServletException, IOException {
-		logger.info("<<< FeedController - followerByIdCnt >>>");
-		return service.followerByIdCnt(follower);
-	}
-	
-	// 팔로잉 카운트
-	@GetMapping("/followingByIdCnt")
-	public int followingByIdCnt(@RequestParam String following) 
-			throws ServletException, IOException{
-		logger.info("<<< FeedController - followingByIdCnt >>>");
-		return service.followingByIdCnt(following);
-	}
+
 	
 }

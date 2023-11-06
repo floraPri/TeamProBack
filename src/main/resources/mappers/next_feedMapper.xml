@@ -71,8 +71,24 @@
 		AND feedcode = #{feedcode}
 	</select>
 	
+	
+	<!-- 피드페이지 유저정보, 게시물 수 - 팔로워수 - 팔로잉수 -->
+	<select id="userInfo" parameterType="String" resultType="com.np.wearound.dto.FeedUserInfoDTO">
+		<![CDATA[
+		SELECT 	COUNT(DISTINCT f.feedcode) AS feedCnt,
+				COUNT(DISTINCT ff.follower) AS followerCnt,
+       			COUNT(DISTINCT ff.following) AS followingCnt
+		FROM user_tbl u
+		LEFT JOIN feed_tbl f ON u.userno = f.userno
+		LEFT JOIN follow_tbl ff ON u.name = ff.following
+		WHERE u.email = #{userid}
+		GROUP BY u.name
+		]]>
+	</select>
+	
 	<!-- 팔로우 ,팔로잉 관련 Select문 -->
 	
+		
 	<select id="isFollow" parameterType="map" resultType="com.np.wearound.entities.Follow">
 		select * from follow_tbl
 		where following=#{following} and follower=#{follower}
