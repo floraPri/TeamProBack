@@ -37,43 +37,30 @@ public class MyPageFeedController {
 	@Autowired
 	private MyPageServiceImpl service;
 
-	//내가 등록한 피드 목록
 	@GetMapping("/myp")
 	public List<Feed> feedList(@RequestParam int userno) 
 			throws ServletException, IOException {
-		logger.info("<<< MyPageFeedController -  feedList(피드 마이페이지)>>>");		
 		List<Feed> myFeedList = service.feedList(userno);
-		System.out.println("FeedController");
 		return myFeedList;
 	}
 	
-
-	//피드 등록
 	@PostMapping(value="/feedAdd", consumes="multipart/form-data")
 	public String feedAdd(
 			@RequestParam("title") String title,
 			@RequestParam("content") String content,
 			@RequestParam("image") MultipartFile image,
 			@RequestParam("userno") int userno,
-			HttpServletRequest req
-			) 
-		throws ServletException, IOException {
-		logger.info("<<< MyPageFeedController -  feedAdd(피드 등록 페이지)>>>");
-		
+			HttpServletRequest req) 
+		throws ServletException, IOException {		
 		FeedAddDTO dto = new FeedAddDTO();
 		
 		String upLoadDirectory = req.getSession().getServletContext().getRealPath("/images");
-		System.out.println("upLoadDirectory : "+upLoadDirectory);
 		
 		if(!image.isEmpty()) {
 			String fileName = image.getOriginalFilename();
-			System.out.println("fileName => "+fileName);
-			
 			File uploadFile = new File(fileName);
-			
 			String fullPath = upLoadDirectory + File.separator + uploadFile;
 			image.transferTo(new File(fullPath));
-			
 			String filePath = "http://localhost:8081/images/"+uploadFile;
 			
 			dto.setImage(filePath);
@@ -82,7 +69,7 @@ public class MyPageFeedController {
 		dto.setUserno(userno);
 		dto.setTitle(title);
 		dto.setContent(content);
-				
+		
 		service.saveFeed(dto);
 		
 		return "redirect:/myPage/myp";
@@ -92,23 +79,15 @@ public class MyPageFeedController {
 	@DeleteMapping("/myp/{feedcode}")
 	public String feedDelete(@PathVariable(name="feedcode") int feedcode) 
 			throws ServletException, IOException {
-		logger.info("<<< FeedController -  feedAdd(피드 삭제)>>>");
-		
-		System.out.println("feedcode : "+feedcode);
-		
 		service.delete(feedcode);
-		System.out.println("Delete성공");
 		return "redirect:/myPage/myp";
 	}
 	
-
 	//피드 상세(select 1건)
 	@GetMapping(value="/feedEditPage")
 	public Feed fetchFeedById(@RequestParam("feedcode") int feedcode) 
 			throws ServletException, IOException {
-		logger.info("<<< MyPageFeedController -  fetchFeedById(피드 상세)>>>");
 		Feed feed = service.findById(feedcode);
-		System.out.println("정상적으로 전송");
 		return feed;
 	}
 	
@@ -120,19 +99,15 @@ public class MyPageFeedController {
 			@RequestParam("feedcontent") String content,
 			@RequestParam("image") MultipartFile image,
 			@RequestParam("userno") int userno,
-			HttpServletRequest req
-			) throws ServletException, IOException {
-		logger.info("<<< MyPageFeedController -  feedEdit(피드 수정)>>>");
+			HttpServletRequest req) throws ServletException, IOException {
+
 		String upLoadDirectory = req.getSession().getServletContext().getRealPath("/images");
-		
 		FeedAddDTO dto = new FeedAddDTO();
+		
 		if(!image.isEmpty()) {
 			String fileName = image.getOriginalFilename();
-			logger.info("fileName fullPath={}", fileName);
 			// 저장할 파일 경로
-			
 			File uploadedFile = new File(fileName);
-			
 			String fullPath = upLoadDirectory + File.separator + uploadedFile;
 			image.transferTo(new File(fullPath));
 			String filePath = "http://localhost:8081/images/"+uploadedFile+"/";
@@ -145,19 +120,33 @@ public class MyPageFeedController {
 		dto.setContent(content);
 				
 		service.updateFeed(dto);
-		System.out.println("수정성공///");
 		
 		return "redirect:/myPage/myp";
 	} 
 	
-	//마이 채널 페이지 피드목록
-	//내가 등록한 피드 목록
+	//마이페이지 => 나의 채널 : 내가 등록한 피드 목록
 	@GetMapping("/myChannel")
 	public List<Feed> myChannelfeedList(@RequestParam int userno) 
 			throws ServletException, IOException {
-		logger.info("<<< MyPageFeedController -  myChannelfeedList(마이채널 피드 목록)>>>");		
 		List<Feed> myFeedList = service.feedList(userno);
-		System.out.println("FeedController");
 		return myFeedList;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+//		logger.info("<<< MyPageFeedController -  feedEdit(피드 수정)>>>");
+//		logger.info("<<< MyPageFeedController -  fetchFeedById(피드 상세)>>>");
+//		logger.info("fileName fullPath={}", fileName);
+//		logger.info("<<< MyPageFeedController -  myChannelfeedList(마이채널 피드 목록)>>>");	
+//		logger.info("<<< FeedController -  feedAdd(피드 삭제)>>>");	
+// 		logger.info("<<< MyPageFeedController -  feedList(피드 마이페이지)>>>");		
+//		logger.info("<<< MyPageFeedController -  feedAdd(피드 등록 페이지)>>>");

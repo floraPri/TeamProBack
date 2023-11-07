@@ -16,9 +16,10 @@
 		        , f.feedimg     AS feedimg
 		        , f.feedregdate     AS feedregdate
 		        , f.comment_cnt     AS comment_cnt
-			 FROM feed_tbl f, user_tbl u
-			WHERE f.userno = u.userno
-			ORDER BY f.feedregdate DESC
+        		, (SELECT Count(*) FROM good_tbl WHERE feedcode = f.feedcode) AS good_count
+		  	 FROM feed_tbl f
+		     JOIN user_tbl u ON f.userno = u.userno
+	    LEFT JOIN good_tbl g ON f.feedcode = g.feedcode
 		]]>
 	</select>
 	
@@ -33,11 +34,14 @@
 					    u.name   AS username,
 			           f.feedcontent AS feedcontent,
 			           f.feedimg AS feedimg,
+			           u.name   AS username,
 			           f.feedregdate AS feedregdate,
 			           f.comment_cnt AS comment_cnt,
+			           (SELECT Count(*) FROM good_tbl WHERE feedcode = f.feedcode) AS good_count,
 			           ROW_NUMBER() OVER (ORDER BY f.feedregdate DESC) AS rnum
-			    FROM feed_tbl f
-			    JOIN user_tbl u ON f.userno = u.userno
+				FROM feed_tbl f
+		  		JOIN user_tbl u ON f.userno = u.userno
+	 	   LEFT JOIN good_tbl g ON f.feedcode = g.feedcode
 			) 
 			WHERE rnum BETWEEN #{start} AND #{end}
 		]]>
@@ -53,11 +57,59 @@
 	        , u.name     AS username
 	        , f.feedregdate     AS feedregdate
 	        , f.comment_cnt     AS comment_cnt
+        	, (SELECT Count(*) FROM good_tbl WHERE feedcode = f.feedcode) AS good_count
+		  FROM feed_tbl f
+		  JOIN user_tbl u ON f.userno = u.userno
+	 LEFT JOIN good_tbl g ON f.feedcode = g.feedcode
+		]]>
+	</select>
+	
+	<!-- 좋아요 체크여부 확인 -->
+	<select id="goodChk" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*)
+		FROM good_tbl
+		WHERE userno = #{userno}
+		AND feedcode = #{feedcode}
+	</select>
+	
+	
+	<!-- 피드페이지 유저정보, 게시물 수 - 팔로워수 - 팔로잉수 -->
+	<select id="userInfo" parameterType="String" resultType="com.np.wearound.dto.FeedUserInfoDTO">
+		<![CDATA[
+		SELECT 	COUNT(DISTINCT f.feedcode) AS feedCnt,
+				COUNT(DISTINCT ff.follower) AS followerCnt,
+       			COUNT(DISTINCT ff.following) AS followingCnt
+		FROM user_tbl u
+		LEFT JOIN feed_tbl f ON u.userno = f.userno
+		LEFT JOIN follow_tbl ff ON u.name = ff.following
+		WHERE u.email = #{userid}
+		GROUP BY u.name
+		]]>
+	</select>
+	
+	<!-- 팔로우 ,팔로잉 관련 Select문 -->
+	
+		
+	<select id="isFollow" parameterType="map" resultType="com.np.wearound.entities.Follow">
+		select * from follow_tbl
+		where following=#{following} and follower=#{follower}
+	</select>
+	
+	<select id="feedByIdCnt" parameterType="String" resultType="int">
+		SELECT count(*)
 		FROM feed_tbl f, user_tbl u
 		WHERE f.userno = u.userno
-		AND u.email = #{userid}
-		ORDER BY f.feedregdate DESC
-		]]>
+		and u.name=#{username}
+	</select>
+	
+	<select id="followerByIdCnt" parameterType="String" resultType="int">
+		select count(*) from follow_tbl
+		where follower=#{follower}
+	</select>
+	
+	<select id="followingByIdCnt" parameterType="String" resultType="int">
+		select count(*) from follow_tbl
+		where following=#{following}
 	</select>
 	
 	

@@ -66,6 +66,7 @@ public class UserAuthProvider {
 		JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secretKey)).build();
 		DecodedJWT decoded = verifier.verify(token);//토큰 검증
 		UserDTO user = userService.findById(decoded.getIssuer());
+		System.out.println("!!!");
 		String role = decoded.getClaim("roles").asString();
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(role));

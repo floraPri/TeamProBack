@@ -6,15 +6,7 @@
 <mapper namespace="com.np.wearound.mappers.BuyMapper">
 	
 	<!--구매목록 -->
-<<<<<<< HEAD
-<<<<<<< HEAD
-	<select id="buyList" resultType="com.np.wearound.dto.BuyDTO">
-=======
 	<select id="buyList" parameterType="int" resultType="com.np.wearound.dto.BuyDTO">
->>>>>>> 6e10ace5d5f72d7cb418782e816cc791a9c3fe76
-=======
-	<select id="buyList" parameterType="int" resultType="com.np.wearound.dto.BuyDTO">
->>>>>>> origin/branch_kmj2
 		<![CDATA[ 
 			SELECT b.product_buycode AS buycode
 				 , p.product_name AS product_name
@@ -29,14 +21,7 @@
 			 FROM buy_tbl b, user_tbl u,product_tbl p
 			WHERE b.product_code = p.product_code
 			  AND b.buyer = u.userno
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 			  AND u.userno = #{userno}
->>>>>>> 6e10ace5d5f72d7cb418782e816cc791a9c3fe76
-=======
-			  AND u.userno = #{userno}
->>>>>>> origin/branch_kmj2
 		]]>
 	</select>
 	
