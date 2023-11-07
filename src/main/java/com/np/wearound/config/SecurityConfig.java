@@ -25,6 +25,7 @@ public class SecurityConfig {
    @Bean
    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
       
+      System.out.println("=== SecurityConfig - securityFilterChain ===");
       http
       .exceptionHandling().authenticationEntryPoint(userAuthenticationEntryPoint)
       .and()
