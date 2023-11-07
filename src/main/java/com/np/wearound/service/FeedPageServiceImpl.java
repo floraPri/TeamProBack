@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.np.wearound.dto.FeedDTO;
+import com.np.wearound.dto.FeedUserInfoDTO;
 import com.np.wearound.entities.FeedComment;
 import com.np.wearound.entities.Follow;
 import com.np.wearound.entities.Good;
@@ -108,7 +109,7 @@ public class FeedPageServiceImpl implements FeedPageService {
 		System.out.println("FeedPageServiceImpl - insertGood(좋아요 입력!)");
 		
 		goodDAO.save(good);
-		System.out.println(good);
+		System.out.println("!!@@@@" + good);
 		System.out.println("FeedPageServiceImpl - 하트 체크 성공!");
 	}
 
@@ -189,6 +190,14 @@ public class FeedPageServiceImpl implements FeedPageService {
 		return sqlSession.selectOne("followingByIdCnt",following);
 	}
 
+	// 개별피드페이지 정보
+	@Override
+	public FeedUserInfoDTO countInfo(String userid) 
+			throws ServletException, IOException {
+		System.out.println("FeedPageServiceImpl - countInfo(계정 정보 출력)");
+		return sqlSession.selectOne("com.np.wearound.mappers.FeedMapper.userInfo",userid);
+	}
 
+	
 
 }

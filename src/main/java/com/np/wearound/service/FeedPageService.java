@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.ui.Model;
 
 import com.np.wearound.dto.FeedDTO;
+import com.np.wearound.dto.FeedUserInfoDTO;
 import com.np.wearound.entities.FeedComment;
 import com.np.wearound.entities.Follow;
 import com.np.wearound.entities.Good;
@@ -70,4 +71,7 @@ public interface FeedPageService {
 			throws ServletException, IOException;
 	
 
+	// 게시물,팔로워 수, 팔로잉 수
+	public FeedUserInfoDTO countInfo(String userid) 
+			throws ServletException, IOException;
 }
